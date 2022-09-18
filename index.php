@@ -20,7 +20,7 @@ include "./public/define.php";
   <!-- 
     - custom css link
   -->
-  <link rel="stylesheet" href="<?= ASSETS ?>css/style.css">
+  <link rel="stylesheet" href="<?= ASSETS ?>css/style.css?v1.1">
 
   <!-- 
     - google font link
@@ -37,6 +37,17 @@ include "./public/define.php";
   -->
 
   <header class="header" data-header>
+
+        <div class="our-infos">
+          <p>hoyostore@store.com,</p>
+          <p>Welcome username</p>
+          <p>flag</p>
+        </div>
+
+    </div>
+
+    <br>
+
     <div class="container">
 
       <div class="overlay" data-overlay></div>
@@ -145,16 +156,16 @@ include "./public/define.php";
         - #HERO
       -->
 
-      <section class="hero" id="home" style="background-image: url('<?= ASSETS ?>images/hero-banner.jpg')">
+      <section class="hero" id="home" style="background-image: url('<?= ASSETS ?>images/hero-banner.png')">
         <div class="container">
 
           <div class="hero-content">
 
-            <p class="hero-subtitle">Fashion Everyday</p>
+            <p class="hero-subtitle">Accounts Everyday</p>
 
-            <h2 class="h1 hero-title">Unrivalled Fashion House</h2>
+            <h2 class="h1 hero-title">Reign Of Serenity</h2>
 
-            <button class="btn btn-primary">Shop Now</button>
+            <button class="btn btn-secondary">Shop Now</button>
 
           </div>
 
@@ -1167,6 +1178,7 @@ include "./public/define.php";
   -->
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  
 
 </body>
 
