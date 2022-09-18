@@ -1,3 +1,8 @@
+<?php
+include "./public/define.php";
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,7 +20,7 @@
   <!-- 
     - custom css link
   -->
-  <link rel="stylesheet" href="./app/theme/assets/css/style.css">
+  <link rel="stylesheet" href="<?= ASSETS ?>css/style.css">
 
   <!-- 
     - google font link
@@ -45,7 +50,7 @@
       </div>
 
       <a href="#" class="logo">
-        <img src="./app/theme/assets/images/logo.svg" alt="Casmart logo" width="130" height="31">
+        <img src="<?= ASSETS ?>images/logo.svg" alt="Casmart logo" width="130" height="31">
       </a>
 
       <div class="header-actions">
@@ -91,7 +96,7 @@
         <div class="navbar-top">
 
           <a href="#" class="logo">
-            <img src="./app/theme/assets/images/logo.svg" alt="Casmart logo" width="130" height="31">
+            <img src="<?= ASSETS ?>images/logo.svg" alt="Casmart logo" width="130" height="31">
           </a>
 
           <button class="nav-close-btn" data-nav-close-btn aria-label="Close Menu">
@@ -140,7 +145,7 @@
         - #HERO
       -->
 
-      <section class="hero" id="home" style="background-image: url('./app/theme/assets/images/hero-banner.jpg')">
+      <section class="hero" id="home" style="background-image: url('<?= ASSETS ?>images/hero-banner.jpg')">
         <div class="container">
 
           <div class="hero-content">
@@ -171,7 +176,7 @@
 
             <li class="service-item">
               <div class="service-item-icon">
-                <img src="./app/theme/assets/images/service-icon-1.svg" alt="Service icon">
+                <img src="<?= ASSETS ?>images/service-icon-1.svg" alt="Service icon">
               </div>
 
               <div class="service-content">
@@ -183,7 +188,7 @@
 
             <li class="service-item">
               <div class="service-item-icon">
-                <img src="./app/theme/assets/images/service-icon-2.svg" alt="Service icon">
+                <img src="<?= ASSETS ?>images/service-icon-2.svg" alt="Service icon">
               </div>
 
               <div class="service-content">
@@ -195,7 +200,7 @@
 
             <li class="service-item">
               <div class="service-item-icon">
-                <img src="./app/theme/assets/images/service-icon-3.svg" alt="Service icon">
+                <img src="<?= ASSETS ?>images/service-icon-3.svg" alt="Service icon">
               </div>
 
               <div class="service-content">
@@ -207,7 +212,7 @@
 
             <li class="service-item">
               <div class="service-item-icon">
-                <img src="./app/theme/assets/images/service-icon-4.svg" alt="Service icon">
+                <img src="<?= ASSETS ?>images/service-icon-4.svg" alt="Service icon">
               </div>
 
               <div class="service-content">
@@ -237,7 +242,7 @@
 
             <li class="category-item">
               <figure class="category-banner">
-                <img src="./app/theme/assets/images/category-1.jpg" alt="Sunglass & eye" loading="lazy" width="510" height="600"
+                <img src="<?= ASSETS ?>images/category-1.jpg" alt="Sunglass & eye" loading="lazy" width="510" height="600"
                   class="w-100">
               </figure>
 
@@ -246,7 +251,7 @@
 
             <li class="category-item">
               <figure class="category-banner">
-                <img src="./app/theme/assets/images/category-2.jpg" alt="Active & outdoor" loading="lazy" width="510" height="600"
+                <img src="<?= ASSETS ?>images/category-2.jpg" alt="Active & outdoor" loading="lazy" width="510" height="600"
                   class="w-100">
               </figure>
 
@@ -255,7 +260,7 @@
 
             <li class="category-item">
               <figure class="category-banner">
-                <img src="./app/theme/assets/images/category-3.jpg" alt="Winter wear" loading="lazy" width="510" height="600"
+                <img src="<?= ASSETS ?>images/category-3.jpg" alt="Winter wear" loading="lazy" width="510" height="600"
                   class="w-100">
               </figure>
 
@@ -264,7 +269,7 @@
 
             <li class="category-item">
               <figure class="category-banner">
-                <img src="./app/theme/assets/images/category-4.jpg" alt="Exclusive footwear" loading="lazy" width="510"
+                <img src="<?= ASSETS ?>images/category-4.jpg" alt="Exclusive footwear" loading="lazy" width="510"
                   height="600" class="w-100">
               </figure>
 
@@ -273,7 +278,7 @@
 
             <li class="category-item">
               <figure class="category-banner">
-                <img src="./app/theme/assets/images/category-5.jpg" alt="Jewelry" loading="lazy" width="510" height="600"
+                <img src="<?= ASSETS ?>images/category-5.jpg" alt="Jewelry" loading="lazy" width="510" height="600"
                   class="w-100">
               </figure>
 
@@ -282,7 +287,7 @@
 
             <li class="category-item">
               <figure class="category-banner">
-                <img src="./app/theme/assets/images/category-6.jpg" alt="Sports cap" loading="lazy" width="510" height="600"
+                <img src="<?= ASSETS ?>images/category-6.jpg" alt="Sports cap" loading="lazy" width="510" height="600"
                   class="w-100">
               </figure>
 
@@ -335,7 +340,7 @@
                 <figure class="card-banner">
 
                   <a href="#">
-                    <img src="./app/theme/assets/images/product-1.jpg" alt="Varsi Leather Bag" loading="lazy" width="800"
+                    <img src="<?= ASSETS ?>images/product-1.jpg" alt="Varsi Leather Bag" loading="lazy" width="800"
                       height="1034" class="w-100">
                   </a>
 
@@ -382,7 +387,7 @@
                 <figure class="card-banner">
 
                   <a href="#">
-                    <img src="./app/theme/assets/images/product-2.jpg" alt="Fit Twill Shirt for Woman" loading="lazy" width="800"
+                    <img src="<?= ASSETS ?>images/product-2.jpg" alt="Fit Twill Shirt for Woman" loading="lazy" width="800"
                       height="1034" class="w-100">
                   </a>
 
@@ -427,7 +432,7 @@
                 <figure class="card-banner">
 
                   <a href="#">
-                    <img src="./app/theme/assets/images/product-3.jpg" alt="Grand Atlantic Chukka Boots" loading="lazy"
+                    <img src="<?= ASSETS ?>images/product-3.jpg" alt="Grand Atlantic Chukka Boots" loading="lazy"
                       width="800" height="1034" class="w-100">
                   </a>
 
@@ -470,7 +475,7 @@
                 <figure class="card-banner">
 
                   <a href="#">
-                    <img src="./app/theme/assets/images/product-4.jpg" alt="Women's Faux-Trim Shirt" loading="lazy" width="800"
+                    <img src="<?= ASSETS ?>images/product-4.jpg" alt="Women's Faux-Trim Shirt" loading="lazy" width="800"
                       height="1034" class="w-100">
                   </a>
 
@@ -513,7 +518,7 @@
                 <figure class="card-banner">
 
                   <a href="#">
-                    <img src="./app/theme/assets/images/product-5.jpg" alt="Soft Touch Interlock Polo" loading="lazy" width="800"
+                    <img src="<?= ASSETS ?>images/product-5.jpg" alt="Soft Touch Interlock Polo" loading="lazy" width="800"
                       height="1034" class="w-100">
                   </a>
 
@@ -556,7 +561,7 @@
                 <figure class="card-banner">
 
                   <a href="#">
-                    <img src="./app/theme/assets/images/product-6.jpg" alt="Casmart Smart Watch" loading="lazy" width="800"
+                    <img src="<?= ASSETS ?>images/product-6.jpg" alt="Casmart Smart Watch" loading="lazy" width="800"
                       height="1034" class="w-100">
                   </a>
 
@@ -601,7 +606,7 @@
                 <figure class="card-banner">
 
                   <a href="#">
-                    <img src="./app/theme/assets/images/product-7.jpg" alt="Casmart Smart Glass" loading="lazy" width="800"
+                    <img src="<?= ASSETS ?>images/product-7.jpg" alt="Casmart Smart Glass" loading="lazy" width="800"
                       height="1034" class="w-100">
                   </a>
 
@@ -646,7 +651,7 @@
                 <figure class="card-banner">
 
                   <a href="#">
-                    <img src="./app/theme/assets/images/product-8.jpg" alt="Cotton Shirt for Men" loading="lazy" width="800"
+                    <img src="<?= ASSETS ?>images/product-8.jpg" alt="Cotton Shirt for Men" loading="lazy" width="800"
                       height="1034" class="w-100">
                   </a>
 
@@ -691,7 +696,7 @@
                 <figure class="card-banner">
 
                   <a href="#">
-                    <img src="./app/theme/assets/images/product-9.jpg" alt="Double-breasted Blazer" loading="lazy" width="800"
+                    <img src="<?= ASSETS ?>images/product-9.jpg" alt="Double-breasted Blazer" loading="lazy" width="800"
                       height="1034" class="w-100">
                   </a>
 
@@ -734,7 +739,7 @@
                 <figure class="card-banner">
 
                   <a href="#">
-                    <img src="./app/theme/assets/images/product-10.jpg" alt="Ribbed Cotton Bodysuits" loading="lazy" width="800"
+                    <img src="<?= ASSETS ?>images/product-10.jpg" alt="Ribbed Cotton Bodysuits" loading="lazy" width="800"
                       height="1034" class="w-100">
                   </a>
 
@@ -800,7 +805,7 @@
 
                 <figure class="card-banner">
                   <a href="#">
-                    <img src="./app/theme/assets/images/blog-1.jpg" alt="Worthy Cyber Monday Fashion From Casmart" loading="lazy"
+                    <img src="<?= ASSETS ?>images/blog-1.jpg" alt="Worthy Cyber Monday Fashion From Casmart" loading="lazy"
                       width="1020" height="700" class="w-100">
                   </a>
                 </figure>
@@ -839,7 +844,7 @@
 
                 <figure class="card-banner">
                   <a href="#">
-                    <img src="./app/theme/assets/images/blog-2.jpg" alt="Holiday Home Decoration I’ve Recently Ordered"
+                    <img src="<?= ASSETS ?>images/blog-2.jpg" alt="Holiday Home Decoration I’ve Recently Ordered"
                       loading="lazy" width="1020" height="700" class="w-100">
                   </a>
                 </figure>
@@ -878,7 +883,7 @@
 
                 <figure class="card-banner">
                   <a href="#">
-                    <img src="./app/theme/assets/images/blog-3.jpg" alt="Unique Ideas for Fashion You Haven’t heard yet"
+                    <img src="<?= ASSETS ?>images/blog-3.jpg" alt="Unique Ideas for Fashion You Haven’t heard yet"
                       loading="lazy" width="1020" height="700" class="w-100">
                   </a>
                 </figure>
@@ -928,7 +933,7 @@
       <section class="section newsletter">
         <div class="container">
 
-          <div class="newsletter-card" style="background-image: url('./app/theme/assets/images/newsletter-bg.png')">
+          <div class="newsletter-card" style="background-image: url('<?= ASSETS ?>images/newsletter-bg.png')">
 
             <h2 class="card-title">Subscribe Newsletter</h2>
 
@@ -976,7 +981,7 @@
         <div class="footer-brand">
 
           <a href="#" class="logo">
-            <img src="./app/theme/assets/images/logo.svg" alt="Casmart logo">
+            <img src="<?= ASSETS ?>images/logo.svg" alt="Casmart logo">
           </a>
 
           <p class="footer-text">
@@ -1140,7 +1145,7 @@
         <div class="payment">
           <p class="payment-title">We Support</p>
 
-          <img src="./app/theme/assets/images/payment-img.png" alt="Online payment logos" class="payment-img">
+          <img src="<?= ASSETS ?>images/payment-img.png" alt="Online payment logos" class="payment-img">
         </div>
 
       </div>
@@ -1155,7 +1160,7 @@
   <!-- 
     - custom js link
   -->
-  <script src="./app/theme/assets/js/script.js"></script>
+  <script src="<?= ASSETS ?>js/script.js"></script>
 
   <!-- 
     - ionicon link
