@@ -1301,3 +1301,12 @@ h3 > a { color: inherit; }
   color: #212121;
   font-weight: bold;
 }
+
+.validation-error{
+  background-color: yellow;
+  border-radius: 5px;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin: 0;
+  text-align: center;
+}

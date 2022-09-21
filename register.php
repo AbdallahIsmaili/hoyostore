@@ -45,8 +45,8 @@ if(isset($_POST['register'])){
             echo "<script>window.open('./register.php','_self')</script>";
         }
         if($result == 2){
-            echo "<script>alert('Registration successful! Please make sure to valid your account')</script>";
-            echo "<script>window.open('./login.php','_self')</script>";
+          echo "<script>alert('Registration successful!')</script>";
+          header("Location:login.php?email=$email&v=false");
         }
     }
     
