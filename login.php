@@ -1,8 +1,11 @@
 <?php 
+
+// Includes
 include "app/classes/databaseClass.php";
 include "app/classes/loginClass.php"; 
 include "app/classes/verificationClass.php"; 
 
+// Declared Variables
 $error = "";
 $password = "";
 $email = '';
@@ -11,31 +14,45 @@ $isValid = true;
 $verificationKey = '';
 $name = '';
 
+// Getting user email
 if(isset($_GET['email'])){
     $email = $_GET['email'];
 }else{
     $email = '';
 }
 
+// Checking if the user email is verified or not
 if(isset($_GET['v'])){
+  $checkValidation = new Verification();
+  
+  $result = $checkValidation->isValid($email);
+  if($result == 0){
     $isValid = false;
-}else{
+  }else if($result == 1){
     $isValid = true;
+  }else{
+    $isValid = "No user registered with that email.";
+  }
 }
 
+
+// Cookie for remembering password
 if (isset($_COOKIE['email']) and isset($_COOKIE['password'])) 
 {
     $password = $_COOKIE['password'];
 
 }
 
+// Log in to your account testing and validation
 $login = new Login();
 
 if(isset($_POST['login'])){
 
+    // Getting informations from the form
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
 
+    // Checking the felids
     if(empty($email) && empty($name) && empty($password) && empty($confirm_password)){
         $error .= "Please make sure to fill in all the boxes <br>";
 
@@ -50,6 +67,7 @@ if(isset($_POST['login'])){
 
     }else if($error == ""){
       
+      // Setting up the cookies
         if(isset($_POST['remember']) and $_POST['remember'] == 'on'){
           setcookie('email', $email, time() + (86400 * 30), "/", $domain = "", $secure = false, $httponly = false );
           setcookie('password', $password, time() + (86400 * 30), "/", $domain = "", $secure = false, $httponly = false );
@@ -81,11 +99,13 @@ if(isset($_POST['login'])){
     
 }
 
+// Messaging you if your account is not verified
 if($isValid == false){
     $validationError = 'We just sent a verification link to your email address <u>'. $email .'</u>, Please verify your email address before you can access your account.';
 }
 
 
+// Resend new verification link
 $Verification = new Verification();
 
 if(isset($_POST['resend-verification-code'])){
@@ -507,13 +527,13 @@ if(isset($_POST['resend-verification-code'])){
     const Cpassword = document.querySelector('#Cpassword');
 
     
-    function sendAgain() {
-      document.getElementById("resendVerificationCode").disabled = true;
-      setTimeout(function() {
-          document.getElementById("resendVerificationCode").disabled = false;
-      }, 5000);
-    }
-    document.getElementById("resendVerificationCode").addEventListener("click", sendAgain);
+    // function sendAgain() {
+    //   document.getElementById("resendVerificationCode").disabled = true;
+    //   setTimeout(function() {
+    //       document.getElementById("resendVerificationCode").disabled = false;
+    //   }, 5000);
+    // }
+    // document.getElementById("resendVerificationCode").addEventListener("click", sendAgain);
 
     togglePassword.addEventListener('click', function (e) {
       // toggle the type attribute

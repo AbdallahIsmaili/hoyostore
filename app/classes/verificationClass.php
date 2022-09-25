@@ -74,4 +74,23 @@ class Verification extends Database{
 
         }
     }
+
+    public function isValid($email){
+        $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = "SELECT * FROM users WHERE user_email = '$email'";
+
+        $statement = $this->conn->prepare($sql);
+        $statement->execute();
+        $result = $statement->fetchAll(PDO::FETCH_OBJ);
+
+        if(count($result) > 0){
+            return $result[0]->validation;
+            die();
+
+        }else{
+            return 2;
+            die();
+
+        }
+    }
 }
