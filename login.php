@@ -1,11 +1,15 @@
 <?php 
+include "app/classes/databaseClass.php";
 include "app/classes/loginClass.php"; 
+include "app/classes/verificationClass.php"; 
 
 $error = "";
 $password = "";
 $email = '';
 $validationError = '';
 $isValid = true;
+$verificationKey = '';
+$name = '';
 
 if(isset($_GET['email'])){
     $email = $_GET['email'];
@@ -81,6 +85,54 @@ if($isValid == false){
     $validationError = 'We just sent a verification link to your email address <u>'. $email .'</u>, Please verify your email address before you can access your account.';
 }
 
+
+$Verification = new Verification();
+
+if(isset($_POST['resend-verification-code'])){
+
+  $verificationKey = md5(time(). $email);
+
+  $result = $Verification->updateVerificationCode($verificationKey, $email);
+
+  if($result == 1){
+    $path = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] ."/hoyostore/validation/registration-verify.php?k=$verificationKey";
+
+    $to = $email;
+    $verification_link = "<a href='$path'>Your account verification link</a>";
+    $subject = "Your email verification.";
+    $message = "
+        
+        Hello $name <br>
+
+        Are you ready to gain access to all of the assets we prepared for clients of HoyoStore?<br>
+
+        First, you must complete your registration by clicking on the link below:<br><br>
+
+        $verification_link
+        <br><br>
+
+        This link will verify your email address, and then you’ll officially be a part of our community.<br>
+
+        See you there!<br><br>
+
+        <strong>Best regards, the <u>HoyoStore</u> team.</strong>
+    ";
+
+    $headers = "From: aismaili690@gmail.com \r\n";
+    $headers .= "MIME-Version: 1.0" . "\r\n";
+    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+    mail($to, $subject, $message, $headers);
+
+    $validationError = "We sent a new verification link to your email $email.";
+
+  }else{
+    $validationError = "Something went wrong, try again later.";
+
+  }
+
+}
+
 ?>
 
 
@@ -91,7 +143,7 @@ if($isValid == false){
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Casmart - Biggest shopping center</title>
+  <title>HoyoStore - Login</title>
 
   <!-- 
     - favicon
@@ -198,11 +250,26 @@ if($isValid == false){
             <h3 class="section-title">Hello and welcome, one more tap to go!</h3>
             <br>
 
-            <form action="login.php" method="POST">
+            <center>
 
-            <h4 class='validation-error'><?php echo $validationError; ?></h4>
-            <h4 style="color: red"><?php echo $error; ?></h4>
+              <p class='validation-error'><?php echo $validationError; ?></p>
+
+              <?php
+
+                if($isValid == false){
+                  echo "<form action='' method='post'>
+                  <button type='submit' id='resendVerificationCode' name='resend-verification-code'>Resend verification link</button> 
+                </form>";
+                }
+
+              ?>
+
+              <h4 style="color: red"><?php echo $error; ?></h4>
+
+            </center>
             <br>
+
+            <form action="login.php" method="POST">
 
                 <p class="inputName">Email :</p>
                 <input type="email" name="email" class="register_field" value="<?=$email?>" placeholder="Enter your email">
@@ -436,24 +503,34 @@ if($isValid == false){
   <script>
     const togglePassword = document.querySelector('#togglePassword');
     const toggleCPassword = document.querySelector('#toggleCPassword');
-  const password = document.querySelector('#password');
-  const Cpassword = document.querySelector('#Cpassword');
+    const password = document.querySelector('#password');
+    const Cpassword = document.querySelector('#Cpassword');
 
-  togglePassword.addEventListener('click', function (e) {
-    // toggle the type attribute
-    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-    password.setAttribute('type', type);
-    // toggle the eye slash icon
-    this.classList.toggle('fa-eye-slash');
-});
+    
+    function sendAgain() {
+      document.getElementById("resendVerificationCode").disabled = true;
+      setTimeout(function() {
+          document.getElementById("resendVerificationCode").disabled = false;
+      }, 5000);
+    }
+    document.getElementById("resendVerificationCode").addEventListener("click", sendAgain);
 
-toggleCPassword.addEventListener('click', function (e) {
-    // toggle the type attribute
-    const type = Cpassword.getAttribute('type') === 'password' ? 'text' : 'password';
-    Cpassword.setAttribute('type', type);
-    // toggle the eye slash icon
-    this.classList.toggle('fa-eye-slash');
-});
+    togglePassword.addEventListener('click', function (e) {
+      // toggle the type attribute
+      const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+      password.setAttribute('type', type);
+      // toggle the eye slash icon
+      this.classList.toggle('fa-eye-slash');
+    });
+
+    toggleCPassword.addEventListener('click', function (e) {
+        // toggle the type attribute
+        const type = Cpassword.getAttribute('type') === 'password' ? 'text' : 'password';
+        Cpassword.setAttribute('type', type);
+        // toggle the eye slash icon
+        this.classList.toggle('fa-eye-slash');
+    });
+
   </script>
 
 </body>

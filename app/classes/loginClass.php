@@ -1,28 +1,5 @@
 <?php
 
-Class Database{
-
-    public $DB_NAME = "hoyostore";
-    public $DB_USER = "root";
-    public $DB_PASS = "";
-    public $DB_HOST = "localhost";
-    public $DB_TYPE = "mysql";
-    public $conn;
-    public function __construct(){
-
-        try {
-
-            $string = $this->DB_TYPE . ":host=" . $this->DB_HOST . ";dbname=" . $this->DB_NAME;
-            $this->conn = new PDO($string, $this->DB_USER, $this->DB_PASS);
-
-        } catch(PDOException $e) {
-            die($e->getMessage());
-        }
-        
-    }
-
-}
-
 
 class Login extends Database{
 
@@ -37,7 +14,7 @@ public function loginUser($email, $password){
 
         if(count($result) > 0){
             if($result[0]->user_password == $password){
-                if($result[0]->validation == 'valid'){
+                if($result[0]->validation == 1){
 
                     session_start();
                     $_SESSION['user_id'] = $result[0]->user_id;

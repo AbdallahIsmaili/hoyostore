@@ -1310,3 +1310,13 @@ h3 > a { color: inherit; }
   margin: 0;
   text-align: center;
 }
+
+.verification-error{
+  background-color: var(--middle-blue-green);
+  color: white;
+  border-radius: 5px;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  margin-top: 10rem;
+  text-align: center;
+}

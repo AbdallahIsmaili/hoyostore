@@ -1,6 +1,7 @@
 <?php
 include "./public/define.php";
 
+include "app/classes/databaseClass.php";
 include "app/classes/registerClass.php"; 
 
 $register = new Register();
@@ -15,7 +16,10 @@ if(isset($_POST['register'])){
     $confirm_password = trim($_POST['confirm_password']);
     $date = date("Y-m-d H:i:s");
     $image = "no-profile.jpg";
-    $validation = "not valid";
+    $validation = 0;
+
+    // Generate a verification key
+    $verificationKey = md5(time(). $email);
 
     if(empty($email) && empty($name) && empty($password) && empty($confirm_password)){
         $error .= "Please make sure to fill in all the boxes <br>";
@@ -34,20 +38,13 @@ if(isset($_POST['register'])){
     }
 
     if(empty($error)){
-        $result = $register->registerUser($name, $email, $password, $confirm_password, $date, $image, $validation);
+        $result = $register->registerUser($name, $email, $password, $confirm_password, $date, $image, $validation, $verificationKey);
 
         if($result == 1){
             echo "<script>alert('Used Email has been already taken!')</script>";
-            echo "<script>window.open('./register.php','_self')</script>";
+            echo "<script>window.open('./login.php','_self')</script>";
         }
-        if($result == 3){
-            echo "<script>alert('Password and confirm password does not match!')</script>";
-            echo "<script>window.open('./register.php','_self')</script>";
-        }
-        if($result == 2){
-          echo "<script>alert('Registration successful!')</script>";
-          header("Location:login.php?email=$email&v=false");
-        }
+        
     }
     
 }
@@ -62,7 +59,7 @@ if(isset($_POST['register'])){
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Casmart - Biggest shopping center</title>
+  <title>HoyoStore - Register</title>
 
   <!-- 
     - favicon
