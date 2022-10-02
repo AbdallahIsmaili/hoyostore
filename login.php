@@ -36,6 +36,7 @@ if(isset($_GET['v'])){
 }
 
 
+
 // Cookie for remembering password
 if (isset($_COOKIE['email']) and isset($_COOKIE['password'])) 
 {
@@ -306,6 +307,7 @@ if(isset($_POST['resend-verification-code'])){
                 <br>
                 <br>
                     <button type="submit" name="login" class="btn btn-primary">Login</button>
+                      <p><a href="user/restore-password.php">forgot you password?</a></p>
 
             </form>
             <br>

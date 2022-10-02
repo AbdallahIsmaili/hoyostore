@@ -1,55 +1,140 @@
-<?php
-include "./public/define.php";
-include "app/classes/databaseClass.php";
-include "app/classes/registerClass.php"; 
+<?php 
 
-$register = new Register();
+// Includes
+include "../app/classes/databaseClass.php";
+include "../app/classes/loginClass.php"; 
+include "../app/classes/verificationClass.php"; 
 
+// Declared Variables
 $error = "";
+$password = "";
+$email = '';
+$validationError = '';
+$isValid = true;
+$verificationKey = '';
 
-if(isset($_POST['register'])){
+// Getting user email
+if(isset($_GET['email'])){
+    $email = $_GET['email'];
+}else{
+    $email = '';
+}
 
-    $name = trim($_POST['name']);
-    $email = trim($_POST['email']);
+if(isset($_GET['k'])){
+    $myKey = $_GET['k'];
+}else{
+    $myKey = '';
+}
+
+// Checking if the user email is verified or not
+if(isset($_GET['email'])){
+  $checkValidation = new Verification();
+  
+  $result = $checkValidation->isValid($email);
+  if($result == 0){
+    $isValid = false;
+    header("Location: ../login.php");
+
+  }else if($result == 1){
+    $isValid = true;
+  }else{
+    $isValid = "No user registered with that email.";
+  }
+}
+
+if(isset($_GET['k'])){
+
+    $checkKey = new Verification();
+
+    $result1 = $checkKey->isKey($email, $myKey);
+    if($result1 == 1){
+        $isValid = true;
+        
+    }else if($result1 == 2){
+        $isValid = false;
+        header("Location: ../login.php");
+
+    }else{
+        $isValid = "Something went wrong.";
+    }
+}
+
+if(!isset($_GET['k']) || !isset($_GET['email'])){
+    $isValid = false;
+}
+
+if($isValid == false){
+    header("Location: ../login.php");
+}
+
+$login = new Login();
+
+if(isset($_POST['change'])){
+
+    // Getting informations from the form
     $password = trim($_POST['password']);
-    $confirm_password = trim($_POST['confirm_password']);
-    $date = date("Y-m-d H:i:s");
-    $image = "no-profile.jpg";
-    $validation = 0;
+    $confirm_password = trim($_POST['Cpassword']);
 
-    // Generate a verification key
-    $verificationKey = md5(time(). $email);
-
-    if(empty($email) && empty($name) && empty($password) && empty($confirm_password)){
+    // Checking the felids
+    if(empty($password) && empty($confirm_password)){
         $error .= "Please make sure to fill in all the boxes <br>";
-    }else if(empty($email) || !preg_match("/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/", $email)){
-        $error .= "Please enter a valid email address <br>";
-    }else if(empty($name) || !preg_match("/^[a-zA-Z_ ]*$/", $name)){
-        $error .= "Please enter a valid name <br>";
+
     }else if(strlen($password) < 8){
         $error .= "Password must be at least 8 characters long <br>";
-    }else if($password !== $confirm_password){
-        $error .= "Passwords do not match <br>";
-    }else if(empty($password)){
+
+    }else if(empty($password) || empty($confirm_password)){
         $error .= "Please enter a password <br>";
-    }else if(empty($confirm_password)){
-        $error .= "Please enter a confirmation password <br>";
-    }
 
-    if(empty($error)){
-        $result = $register->registerUser($name, $email, $password, $confirm_password, $date, $image, $validation, $verificationKey);
+    }else if($password != $confirm_password){
+        $error .= "Password doesn't match the confirmed password <br>";
 
+    }else if($error == ""){
+
+        $password = hash("sha1", $password);
+
+        $result = $login->updatePassword($email, $password);
         if($result == 1){
-            echo "<script>alert('Used Email has been already taken!')</script>";
-            echo "<script>window.open('./login.php','_self')</script>";
+            
+            $path = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'] ."/hoyostore/login.php";
+
+            $to = $email;
+            $verification_link = "<a href='$path'>HoyoStore login page</a>";
+            $subject = "Your password has been changed.";
+            $message = "
+                Hello $email
+
+                You have changed your password<br>
+
+                Please go ahead and try to login again with your new password at the following page.<br>
+                
+                <b>$verification_link</b>
+                <br>
+
+                See you there!<br><br>
+
+                <strong>Best regards, the <u>HoyoStore</u> team.</strong>
+            ";
+
+            $headers = "From: aismaili690@gmail.com \r\n";
+            $headers .= "MIME-Version: 1.0" . "\r\n";
+            $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+            mail($to, $subject, $message, $headers);
+
+            echo "<script>alert('Your password has been reset. Try to login again!')</script>";
+            echo "<script>window.open('../login.php','_self')</script>";
+        }
+
+        if($result == 2){
+            echo "<script>alert('Something went wrong!')</script>";
         }
         
     }
     
 }
 
-
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -58,7 +143,7 @@ if(isset($_POST['register'])){
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HoyoStore - Register</title>
+  <title>HoyoStore - Login</title>
 
   <!-- 
     - favicon
@@ -69,7 +154,7 @@ if(isset($_POST['register'])){
   <!-- 
     - custom css link
   -->
-  <link rel="stylesheet" href="./app/theme/assets/css/style.css?v1.10.1">
+  <link rel="stylesheet" href="../app/theme/assets/css/style.css?v1.10.2">
 
   <!-- 
     - google font link
@@ -101,7 +186,7 @@ if(isset($_POST['register'])){
       <div class="overlay" data-overlay></div>
 
       <a href="#" class="logo">
-        <img src="./app/theme/assets/images/logo.svg" alt="Casmart logo" width="130" height="31">
+        <img src="../app/theme/assets/images/logo.svg" alt="Casmart logo" width="130" height="31">
       </a>
 
       <button class="nav-open-btn" data-nav-open-btn aria-label="Open Menu">
@@ -115,7 +200,7 @@ if(isset($_POST['register'])){
         <div class="navbar-top">
 
           <a href="#" class="logo">
-            <img src="./app/theme/assets/images/logo.svg" alt="Casmart logo" width="130" height="31">
+            <img src="../app/theme/assets/images/logo.svg" alt="Casmart logo" width="130" height="31">
           </a>
 
           <button class="nav-close-btn" data-nav-close-btn aria-label="Close Menu">
@@ -161,40 +246,48 @@ if(isset($_POST['register'])){
   <div class="container">
         
         <br>
-        <section class="register-form">
-            <p class="section-subtitle">Register Now!!</p>
+        <section class="login-form">
+            <h3 class="section-title">Hello and welcome, one more tap to go!</h3>
             <br>
-        <div class="form-control">
 
-            <form action="register.php" method="POST">
+            <center>
 
-            <h2 style="color: red"><?php echo $error; ?></h2>
+              <p class='validation-error'><?php echo $validationError; ?></p>
 
-                <p class="inputName">Name :</p> 
-                <input type="text" name="name" class="register_field" placeholder="Enter your name">
+              <?php
 
-                <p class="inputName">Email :</p> 
-                <input type="email" name="email" class="register_field" placeholder="Enter your email">
+                if($isValid == false){
+                  echo "<form action='' method='post'>
+                  <button type='submit' id='resendVerificationCode' name='resend-verification-code'>Resend verification link</button> 
+                </form>";
+                }
 
-                <p class="inputName">Password :</p> 
-                <input type="password" id="password" name="password" class="register_field" placeholder="Enter your password"><i class="far fa-eye" id="togglePassword" style="cursor: pointer; font-size: 13px;"> Show password</i><br><br>
+              ?>
 
-                <p class="inputName">Confirm your Password :</p> 
-                <input type="password" id="Cpassword" name="confirm_password" class="register_field" placeholder="Confirm your password">
-                <i class="far fa-eye" id="toggleCPassword" style="cursor: pointer; font-size: 13px;"> Show password</i><br>
+              <h4 style="color: red"><?php echo $error; ?></h4>
+
+            </center>
+            <br>
+
+            <form action="" method="POST">
+
+                <p class="inputName">New password :</p>
+                <input type="password" name="password" class="register_field" value="" placeholder="Enter new password">
+                <br>
+                <br>
+
+                <p class="inputName">confirm password :</p>
+                <input type="password" name="Cpassword" value="" class="register_field" placeholder="Confirm password">
 
                 <br>
-                <div class="form-group">
-                    <button type="submit" name="register" class="btn btn-primary">Sign up</button>
-                </div>
+                <br>
+                <br>
+                    <button type="submit" name="change" class="btn btn-primary">Update password</button>
+                      
             </form>
             <br>
             <br>
             
-        </div>
-            <p>Already have an account? <a href="login.php">log in!</a></p>
-            <!-- <a href="./config/connect.php">test</a> -->
-
         </section>
 
     </div>
@@ -215,7 +308,7 @@ if(isset($_POST['register'])){
         <div class="footer-brand">
 
           <a href="#" class="logo">
-            <img src="./app/theme/assets/images/logo.svg" alt="Casmart logo">
+            <img src="../app/theme/assets/images/logo.svg" alt="Casmart logo">
           </a>
 
           <p class="footer-text">
@@ -379,7 +472,7 @@ if(isset($_POST['register'])){
         <div class="payment">
           <p class="payment-title">We Support</p>
 
-          <img src="./app/theme/assets/images/payment-img.png" alt="Online payment logos" class="payment-img">
+          <img src="../app/theme/assets/images/payment-img.png" alt="Online payment logos" class="payment-img">
         </div>
 
       </div>
@@ -394,7 +487,7 @@ if(isset($_POST['register'])){
   <!-- 
     - custom js link
   -->
-  <script src="./app/theme/assets/js/script.js"></script>
+  <script src="../app/theme/assets/js/script.js"></script>
 
   <!-- 
     - ionicon link
@@ -405,24 +498,25 @@ if(isset($_POST['register'])){
   <script>
     const togglePassword = document.querySelector('#togglePassword');
     const toggleCPassword = document.querySelector('#toggleCPassword');
-  const password = document.querySelector('#password');
-  const Cpassword = document.querySelector('#Cpassword');
+    const password = document.querySelector('#password');
+    const Cpassword = document.querySelector('#Cpassword');
 
-  togglePassword.addEventListener('click', function (e) {
-    // toggle the type attribute
-    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-    password.setAttribute('type', type);
-    // toggle the eye slash icon
-    this.classList.toggle('fa-eye-slash');
-});
+    togglePassword.addEventListener('click', function (e) {
+      // toggle the type attribute
+      const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+      password.setAttribute('type', type);
+      // toggle the eye slash icon
+      this.classList.toggle('fa-eye-slash');
+    });
 
-toggleCPassword.addEventListener('click', function (e) {
-    // toggle the type attribute
-    const type = Cpassword.getAttribute('type') === 'password' ? 'text' : 'password';
-    Cpassword.setAttribute('type', type);
-    // toggle the eye slash icon
-    this.classList.toggle('fa-eye-slash');
-});
+    toggleCPassword.addEventListener('click', function (e) {
+        // toggle the type attribute
+        const type = Cpassword.getAttribute('type') === 'password' ? 'text' : 'password';
+        Cpassword.setAttribute('type', type);
+        // toggle the eye slash icon
+        this.classList.toggle('fa-eye-slash');
+    });
+
   </script>
 
 </body>

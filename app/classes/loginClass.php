@@ -47,4 +47,56 @@ public function getUserRank(){
     return $_SESSION['user_rank'];
 }
 
+public function findUser($email){
+    try{
+        $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = "SELECT * FROM users WHERE user_email = '$email' LIMIT 1";
+
+        $statement = $this->conn->prepare($sql);
+        $statement->execute();
+        $result = $statement->fetchAll(PDO::FETCH_OBJ);
+
+        if(count($result) > 0){
+            return 1;
+            die();
+
+        }else{
+            return 2;
+            die();
+        }
+
+    }catch(PDOException $e){
+        echo $e->getMessage();
+    }
+}
+
+public function updatePassword($email, $password){
+    try{
+        $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = "SELECT * FROM users WHERE user_email = '$email' LIMIT 1";
+
+        $statement = $this->conn->prepare($sql);
+        $statement->execute();
+        $result = $statement->fetchAll(PDO::FETCH_OBJ);
+
+        if(count($result) > 0){
+            $sql = "UPDATE users SET user_password = '$password' WHERE user_email = '$email'";
+
+            $statement = $this->conn->prepare($sql);
+            $statement->execute();
+
+            return 1;
+            die();
+
+        }else{
+            return 2;
+            die();
+
+        }
+
+    }catch(PDOException $e){
+        echo $e->getMessage();
+    } 
+}
+
 }

@@ -75,7 +75,7 @@ class Verification extends Database{
         }
     }
 
-    public function isValid($email){
+   public function isValid($email){
         $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $sql = "SELECT * FROM users WHERE user_email = '$email'";
 
@@ -92,5 +92,79 @@ class Verification extends Database{
             die();
 
         }
+    } 
+
+    public function isKey($email, $myKey){
+        $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = "SELECT * FROM users WHERE user_email = '$email'";
+
+        $statement = $this->conn->prepare($sql);
+        $statement->execute();
+        $result = $statement->fetchAll(PDO::FETCH_OBJ);
+
+        if(count($result) > 0){
+            if($result[0]->verification_number == $myKey){
+                return 1;
+
+            }else{
+                return 2;
+            
+            }
+
+        }else{
+            return 3;
+
+        }
     }
+
+    public function updateVerificationNumber($key, $email){
+        $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = "SELECT * FROM users WHERE user_email = '$email' LIMIT 1";
+
+        $statement = $this->conn->prepare($sql);
+        $statement->execute();
+        $result = $statement->fetchAll(PDO::FETCH_OBJ);
+
+        if(count($result) > 0){
+            $sql = "UPDATE users SET verification_Number = '$key' WHERE user_email = '$email'";
+
+            $statement = $this->conn->prepare($sql);
+            $statement->execute();
+
+            return 1;
+            die();
+
+        }else{
+            return 2;
+            die();
+
+        }
+    }
+
+    public function checkKeyValidation($email, $key){
+        try{
+            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $sql = "SELECT * FROM users WHERE user_email = '$email' LIMIT 1";
+    
+            $statement = $this->conn->prepare($sql);
+            $statement->execute();
+            $result = $statement->fetchAll(PDO::FETCH_OBJ);
+    
+            if(count($result) > 0){
+                if((int)$result[0]->verification_number == (int)$key){
+                    return 1;
+    
+                }else{
+                    return 2;
+                }
+            }else{
+                return 3;
+            }
+    
+        }catch(PDOException $e){
+            echo $e->getMessage();
+        }
+    }
+
+
 }
