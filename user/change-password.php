@@ -272,12 +272,10 @@ if(isset($_POST['change'])){
             <form action="" method="POST">
 
                 <p class="inputName">New password :</p>
-                <input type="password" name="password" class="register_field" value="" placeholder="Enter new password">
-                <br>
-                <br>
+                <input type="password" name="password" id="password" class="register_field" value="" placeholder="Enter new password"><i class="far fa-eye" id="togglePassword" style="cursor: pointer; font-size: 13px;"> Show password</i><br><br>
 
                 <p class="inputName">confirm password :</p>
-                <input type="password" name="Cpassword" value="" class="register_field" placeholder="Confirm password">
+                <input type="password" name="Cpassword" id="Cpassword" value="" class="register_field" placeholder="Confirm password"><i class="far fa-eye" id="toggleCPassword" style="cursor: pointer; font-size: 13px;"> Show password</i><br>
 
                 <br>
                 <br>
