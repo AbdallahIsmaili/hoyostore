@@ -1,6 +1,9 @@
 <?php
 include "./public/define.php";
 
+session_start();
+$username = $_SESSION['user_name'];
+$userURL = '';
 ?>
 
 <!DOCTYPE html>
@@ -40,7 +43,7 @@ include "./public/define.php";
 
         <div class="our-infos">
           <p>hoyostore@store.com,</p>
-          <p>Welcome username</p>
+          <p>Welcome <?php echo ucfirst($username); ?></p>
           <p>flag</p>
         </div>
 
@@ -66,11 +69,26 @@ include "./public/define.php";
 
       <div class="header-actions">
 
-        <button class="header-action-btn">
-          <ion-icon name="person-outline" aria-hidden="true"></ion-icon>
+      <?php 
+        if(isset($_SESSION['user_url'])){
+          $username = $_SESSION['user_name'];
+          $userURL = $_SESSION['user_url'];
 
-          <p class="header-action-label">Sign in</p>
-        </button>
+          echo "<a href='./user/profile.php?u=$userURL' class='header-action-btn'>
+          <ion-icon name='person-outline' aria-hidden='true'></ion-icon>
+
+          <p class='header-action-label'>$username</p>
+        </a>";
+
+        }else{
+          echo "<a href='login.php'class='header-action-btn'>
+          <ion-icon name='person-outline' aria-hidden='true'></ion-icon>
+
+          <p class='header-action-label'>Sign in</p>
+        </a>";
+        }
+      ?>
+        
 
         <button class="header-action-btn">
           <ion-icon name="search-outline" aria-hidden="true"></ion-icon>
@@ -78,21 +96,39 @@ include "./public/define.php";
           <p class="header-action-label">Search</p>
         </button>
 
-        <button class="header-action-btn">
-          <ion-icon name="cart-outline" aria-hidden="true"></ion-icon>
+        <?php 
+          if(isset($_SESSION['user_url'])){
+            $username = $_SESSION['user_name'];
+            $userURL = $_SESSION['user_url'];
 
-          <p class="header-action-label">Cart</p>
+            echo "<a href='./user/cart.php?u=$userURL' class='header-action-btn'>
+            <ion-icon name='cart-outline' aria-hidden='true'></ion-icon>
 
-          <div class="btn-badge green" aria-hidden="true">3</div>
-        </button>
+            <p class='header-action-label'>Cart</p>
+            <div class='btn-badge green' aria-hidden='true'>3</div>
+          </a>";
+          
+          }else{
+            echo "";
+          }
+        ?>
 
-        <button class="header-action-btn">
-          <ion-icon name="heart-outline" aria-hidden="true"></ion-icon>
+        <?php 
+          if(isset($_SESSION['user_url'])){
+            $username = $_SESSION['user_name'];
+            $userURL = $_SESSION['user_url'];
 
-          <p class="header-action-label">Wishlisht</p>
+            echo "<a href='./user/wishlist.php?u=$userURL' class='header-action-btn'>
+            <ion-icon name='heart-outline' aria-hidden='true'></ion-icon>
 
-          <div class="btn-badge" aria-hidden="true">2</div>
-        </button>
+            <p class='header-action-label'>Wishlist</p>
+            <div class='btn-badge' aria-hidden='true'>2</div>
+          </a>";
+          
+          }else{
+            echo "";
+          }
+        ?>
 
       </div>
 

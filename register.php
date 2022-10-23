@@ -14,8 +14,9 @@ if(isset($_POST['register'])){
     $password = trim($_POST['password']);
     $confirm_password = trim($_POST['confirm_password']);
     $date = date("Y-m-d H:i:s");
-    $image = "no-profile.jpg";
+    $image = "no-profile.webp";
     $validation = 0;
+    $phoneNumber = 'no phone';
 
     // Generate a verification key
     $verificationKey = md5(time(). $email);
@@ -37,7 +38,7 @@ if(isset($_POST['register'])){
     }
 
     if(empty($error)){
-        $result = $register->registerUser($name, $email, $password, $confirm_password, $date, $image, $validation, $verificationKey);
+        $result = $register->registerUser($name, $email, $phoneNumber, $password, $confirm_password, $date, $image, $validation, $verificationKey);
 
         if($result == 1){
             echo "<script>alert('Used Email has been already taken!')</script>";

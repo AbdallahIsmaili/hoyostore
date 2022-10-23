@@ -1320,3 +1320,79 @@ h3 > a { color: inherit; }
   margin-top: 10rem;
   text-align: center;
 }
+
+.profile-links{
+  background-color: #212121;
+  padding: 30px 20px;
+  text-align: center;
+  margin: 100px 70px 0 70px;
+  border-radius: 10px;
+}
+
+.profile-links img{
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-bottom: 25px;
+}
+
+.profile-links li{
+  display: block;
+  margin: 10px 0;
+}
+
+.profile-links li a{
+  color:hsl(0, 0%, 100%);
+  text-decoration: none;
+  margin: 10px 0;
+  display: inline-block;
+}
+
+.mt-custom{
+  margin-top: 100px;
+}
+
+.mt-custom .details{
+  border-bottom: 1px solid #212121;
+  padding: 20px ;
+  font-weight: 500;
+}
+
+.btn-dark{
+  width: 300px;
+}
+
+@media (max-width:1200px){
+  .mt-custom{
+    margin-top: 50px;
+  }
+
+  .profile-links{
+    margin: 50px 50px 0 50px;
+  }
+}
+
+@media (max-width:991px){
+  .mt-custom{
+    margin-top: 20px;
+  }
+
+  .profile-links{
+    margin: 20px 0 0 0;
+  }
+}
+
+@media (max-width:600px){
+  .profile-links li{
+    margin: 0;
+  }
+
+  .profile-links img{
+    margin-bottom: 10px;
+  }
+
+  .mt-custom .details{
+    padding: 10px;
+  }
+}

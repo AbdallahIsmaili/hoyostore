@@ -19,6 +19,7 @@ public function loginUser($email, $password){
                     session_start();
                     $_SESSION['user_id'] = $result[0]->user_id;
                     $_SESSION['user_email'] = $result[0]->user_email;
+                    $_SESSION['user_phone'] = $result[0]->phone_number;
                     $_SESSION['user_rank'] = $result[0]->rank;
                     $_SESSION['user_name'] = $result[0]->username;
                     $_SESSION['user_url'] = $result[0]->user_urlAddress;

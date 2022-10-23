@@ -2,7 +2,7 @@
 
 class Register extends Database{
 
-    public function registerUser($name, $email, $password, $confirm_password, $date, $image, $validation, $verificationKey){
+    public function registerUser($name, $email, $phoneNumber, $password, $confirm_password, $date, $image, $validation, $verificationKey){
 
         try{
             
@@ -24,7 +24,7 @@ class Register extends Database{
                     $url_address = $this->get_random_string_max(99);
                     
                     $password = hash("sha1", $password);
-                    $sql = "INSERT INTO users (user_email, user_password, username, user_urlAddress, join_date, rank, profile_picture, validation, verification_key) VALUES ('$email', '$password', '$name', '$url_address','$date', 'costumer', '$image', '$validation', '$verificationKey')";
+                    $sql = "INSERT INTO users (user_email, phone_number , user_password, username, user_urlAddress, join_date, rank, profile_picture, validation, verification_key) VALUES ('$email', '$phoneNumber', '$password', '$name', '$url_address','$date', 'costumer', '$image', '$validation', '$verificationKey')";
                     $statement = $this->conn->prepare($sql);
                     $statement->execute();
                     $result = $statement->fetchAll(PDO::FETCH_OBJ);
