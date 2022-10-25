@@ -40,7 +40,8 @@ if(isset($_GET['v'])){
 // Cookie for remembering password
 if (isset($_COOKIE['email']) and isset($_COOKIE['password'])) 
 {
-    $password = $_COOKIE['password'];
+  $emailCookie = $_COOKIE['email'];
+  $passwordCookie = $_COOKIE['password'];
 
 }
 
@@ -83,17 +84,18 @@ if(isset($_POST['login'])){
         }
 
         if($result == 2){
-            echo "<script>alert('Wrong password!')</script>";
+          $error .= "Wrong Password <br>";
         }
 
         if($result == 3){
-            echo "<script>alert('No user found with that email!')</script>";
-            echo "<script>window.open('register.php','_self')</script>";
+            
+            $validationError .= "No user found with that email. Want to create an account with that email? <a href='register.php?email=$email'> [ Yes use it ] </a> <br>";
+            
         }
 
         if($result == 4){
             $isValid = false;
-            echo "<script>alert('Please make sure your email is verified!')</script>";
+            $validationError .= "Please make sure your email is verified! <br>";
         }
         
     }
@@ -293,15 +295,15 @@ if(isset($_POST['resend-verification-code'])){
             <form action="login.php" method="POST">
 
                 <p class="inputName">Email :</p>
-                <input type="email" name="email" class="register_field" value="<?=$email?>" placeholder="Enter your email">
+                <input type="email" name="email" class="register_field" value="<?=$emailCookie?>" placeholder="Enter your email">
 
                 <p class="inputName">Password :</p>
-                <input type="password" name="password" value="" class="register_field" placeholder="Enter your password">
+                <input type="password" name="password" value="<?=$passwordCookie?>" class="register_field" placeholder="Enter your password">
 
             <br>
 
                 <p class="inputName">Remember me? </p>
-                <input class="register_field" type="checkbox" name="remember">
+                <input class="register_field" type="checkbox" name="remember" value='on'>
 
                 <br>
                 <br>

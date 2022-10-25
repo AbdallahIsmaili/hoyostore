@@ -3,10 +3,19 @@ include "../public/define.php";
 
 session_start();
 
-$username = ucfirst($_SESSION['user_name']);
-$userEmail = $_SESSION['user_email'];
-$userRank = ucfirst($_SESSION['user_rank']);
-$userPhoneNumber = $_SESSION['user_phone'];
+if(isset($_SESSION['user_url'])){
+
+  $username = ucfirst($_SESSION['user_name']);
+  $userEmail = $_SESSION['user_email'];
+  $userRank = ucfirst($_SESSION['user_rank']);
+  $userPhoneNumber = $_SESSION['user_phone'];
+
+}else{
+  $username = '';
+  $userEmail = '';
+  $userRank = '';
+  $userPhoneNumber = '';
+}
 
 ?>
 
@@ -41,6 +50,7 @@ $userPhoneNumber = $_SESSION['user_phone'];
 </head>
 
 <body>
+
 
 
 <header class="header mb-0" data-header>
@@ -86,7 +96,7 @@ $userPhoneNumber = $_SESSION['user_phone'];
     </a>";
     
     }else{
-      echo "vvv";
+      echo "";
     }
   ?>
 
@@ -110,6 +120,12 @@ $userPhoneNumber = $_SESSION['user_phone'];
 
   </div>
 </header>
+
+<?php
+
+  if(isset($_SESSION['user_url'])){
+
+?>
 
 <div class="container mb-5">
 
@@ -172,7 +188,25 @@ $userPhoneNumber = $_SESSION['user_phone'];
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
+<?php
 
+      }else{
+?>
+
+  <h1 class="container mt-5">Hello &#128149; </h1>
+  <div class="container mx-auto p-5 text-white bg-black fs-4">
+          <p>Please make sure to Log in if you already have an account, or please join us by creating an account.</p>
+
+          <div class="btn-group-vertical w-100" role="group" aria-label="Vertical button group">
+            <a href="../login.php" class="btn btn-dark fs-5">Log in &nbsp; <i class='bx bx-log-in'></i></a>
+            <a href="../register.php" class="btn btn-dark fs-5"> Register &nbsp; <i class='bx bxs-user-plus'></i> </a>
+          </div>
+  </div>
+
+<?php
+      }
+
+?>
   
 
 </body>

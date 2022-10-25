@@ -7,6 +7,12 @@ $register = new Register();
 
 $error = "";
 
+if(isset($_GET['email'])){
+  $email = $_GET['email'];
+}else{
+  $email = '';
+}
+
 if(isset($_POST['register'])){
 
     $name = trim($_POST['name']);
@@ -175,7 +181,7 @@ if(isset($_POST['register'])){
                 <input type="text" name="name" class="register_field" placeholder="Enter your name">
 
                 <p class="inputName">Email :</p> 
-                <input type="email" name="email" class="register_field" placeholder="Enter your email">
+                <input type="email" name="email" value='<?=$email?>' class="register_field" placeholder="Enter your email">
 
                 <p class="inputName">Password :</p> 
                 <input type="password" id="password" name="password" class="register_field" placeholder="Enter your password"><i class="far fa-eye" id="togglePassword" style="cursor: pointer; font-size: 13px;"> Show password</i><br><br>
