@@ -2,7 +2,11 @@
 include "./public/define.php";
 
 session_start();
-$username = $_SESSION['user_name'];
+if(isset($_SESSION['user_name'])){
+  $username = $_SESSION['user_name'];
+}else{
+  $username = "";
+}
 $userURL = '';
 ?>
 

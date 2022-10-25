@@ -1,4 +1,6 @@
 <?php
+include "../app/classes/databaseClass.php";
+include "../app/classes/loginClass.php"; 
 include "../public/define.php";
 
 session_start();
@@ -15,6 +17,16 @@ if(isset($_SESSION['user_url'])){
   $userEmail = '';
   $userRank = '';
   $userPhoneNumber = '';
+}
+
+$logout = new Login();
+
+if(isset($_POST['logout'])){
+  $result = $logout->logoutUser();
+
+  if(isset($result) and $result == true){
+    echo "<script>window.open('../index.php','_self')</script>";
+  }
 }
 
 ?>
@@ -171,8 +183,16 @@ if(isset($_SESSION['user_url'])){
                 <button type="button" class="btn btn-dark fs-5">My Address &nbsp; <i class='bx bxs-objects-horizontal-left fs-4'></i></button>
                 <button type="button" class="btn btn-dark fs-5">Account management &nbsp; <i class='bx bxs-message-square-edit fs-4'></i> </button>
                 <button type="button" class="btn btn-dark fs-5">Close your account &nbsp; <i class='bx bx-window-close fs-4' ></i></button>
-                <button type="button" class="btn btn-danger fs-5">Log out &nbsp; <i class='bx bx-log-out-circle fs-4' ></i></button>
               </div>
+                
+                <form action="" method="post">
+
+                  <div class="btn-group-vertical w-100" role="group" aria-label="Vertical button group">
+                    <button type="submit" name='logout' class="btn btn-danger fs-5">Log out &nbsp; <i class='bx bx-log-out-circle fs-4' ></i></button>
+                  </div>
+                  
+                </form>
+
             </div>
         </div>
     </div>

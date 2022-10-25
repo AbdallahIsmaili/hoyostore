@@ -100,4 +100,16 @@ public function updatePassword($email, $password){
     } 
 }
 
+public function logoutUser(){
+    try{
+        session_reset();
+        session_destroy();
+
+        return true;
+
+    }catch(PDOException $e){
+        echo $e->getMessage();
+    } 
+}
+
 }
