@@ -159,19 +159,19 @@ $userURL = '';
           </li>
 
           <li>
-            <a href="#" class="navbar-link">Shop</a>
+            <a href="shop" class="navbar-link">Shop</a>
           </li>
 
           <li>
-            <a href="#" class="navbar-link">About</a>
+            <a href="about" class="navbar-link">About</a>
           </li>
 
           <li>
-            <a href="#blog" class="navbar-link">Blog</a>
+            <a href="blog" class="navbar-link">Blog</a>
           </li>
 
           <li>
-            <a href="#" class="navbar-link">Contact</a>
+            <a href="contact.php" class="navbar-link">Contact</a>
           </li>
 
         </ul>
