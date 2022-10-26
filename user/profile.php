@@ -11,12 +11,14 @@ if(isset($_SESSION['user_url'])){
   $userEmail = $_SESSION['user_email'];
   $userRank = ucfirst($_SESSION['user_rank']);
   $userPhoneNumber = $_SESSION['user_phone'];
+  $userAddress = $_SESSION['user_address'];
 
 }else{
   $username = '';
   $userEmail = '';
   $userRank = '';
   $userPhoneNumber = '';
+  $userAddress = '';
 }
 
 $logout = new Login();
@@ -149,7 +151,12 @@ if(isset($_POST['logout'])){
         if($userPhoneNumber != 'no phone'){
           echo "<h5> > $userPhoneNumber </h5>";
         }else{
-          echo "<a href='./user-informations/update/addPhoneNumber.php?u=$userURL'> > Add your phone number</a>";
+          echo "<a href='./user-informations/update/costumer-info.php?u=$userURL'> > Add your phone number</a>";
+        }
+        if($userAddress != 'no address'){
+          echo "<h5> > $userAddress </h5>";
+        }else{
+          echo "<a href='./user-informations/update/costumer-info.php?u=$userURL'> > Add your address</a>";
         }
       ?>
 
@@ -159,12 +166,18 @@ if(isset($_POST['logout'])){
           <div class="col-md-6">
             <div class="profile-links fs-4">
                 <img src="images/<?php echo $_SESSION['user_image'] ?>" alt="" srcset="">
-                <li><a href="#">Home</a> <i class='bx bxs-home-smile text-light'></i> </li>
-                <li><a href="#">Shop <i class='bx bxs-store-alt text-light'></i></a></li>
-                <li><a href="#">Cart <i class='bx bxs-cart text-light'></i></a></li>
-                <li><a href="#">Wishlist <i class='bx bxs-bookmark-heart text-light'></i> </a></li>
-                <li><a href="#">Blog <i class='bx bxs-book-bookmark text-light'></i> </a></li>
-                <li><a href="#">Contact <i class='bx bxs-message-square-edit text-light'></i> </a></li>
+
+                <button type="button" class="btn mx-auto btn-light"
+                  style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                  Edit profile picture
+                </button>
+
+                <li><a href="../">Home</a> <i class='bx bxs-home-smile text-light'></i> </li>
+                <li><a href="../shop.php">Shop <i class='bx bxs-store-alt text-light'></i></a></li>
+                <li><a href="cart.php">Cart <i class='bx bxs-cart text-light'></i></a></li>
+                <li><a href="wishlist.php">Wishlist <i class='bx bxs-bookmark-heart text-light'></i> </a></li>
+                <li><a href="../blog.php">Blog <i class='bx bxs-book-bookmark text-light'></i> </a></li>
+                <li><a href="../contact.php">Contact <i class='bx bxs-message-square-edit text-light'></i> </a></li>
               </div>
             </div>
             <div class="col-md-6">

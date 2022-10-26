@@ -89,7 +89,7 @@ if(isset($_POST['login'])){
 
         if($result == 3){
             
-            $validationError .= "No user found with that email. Want to create an account with that email? <a href='register.php?email=$email'> [ Yes use it ] </a> <br>";
+          $validationError .= "No user found with that email. Want to create an account with that email? <a href='register.php?email=$email'> [ Yes use it ] </a> <br>";
             
         }
 
