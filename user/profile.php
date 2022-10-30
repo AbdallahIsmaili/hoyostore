@@ -1,35 +1,46 @@
 <?php
-include "../app/classes/databaseClass.php";
-include "../app/classes/loginClass.php"; 
-include "../public/define.php";
+  include "../app/classes/databaseClass.php";
+  include "../app/classes/loginClass.php"; 
+  include "../app/classes/profileClass.php"; 
+  include "../public/define.php";
 
-session_start();
+  session_start();
 
-if(isset($_SESSION['user_url'])){
+  $userProfilePicture = $_SESSION['user_image'];
+  $email = $_SESSION['user_email'];
 
-  $username = ucfirst($_SESSION['user_name']);
-  $userEmail = $_SESSION['user_email'];
-  $userRank = ucfirst($_SESSION['user_rank']);
-  $userPhoneNumber = $_SESSION['user_phone'];
-  $userAddress = $_SESSION['user_address'];
+  if(isset($_SESSION['user_url'])){
 
-}else{
-  $username = '';
-  $userEmail = '';
-  $userRank = '';
-  $userPhoneNumber = '';
-  $userAddress = '';
-}
+    $username = ucfirst($_SESSION['user_name']);
+    $userEmail = $_SESSION['user_email'];
+    $userRank = ucfirst($_SESSION['user_rank']);
+    $userPhoneNumber = $_SESSION['user_phone'];
+    $userAddress = $_SESSION['user_address'];
 
-$logout = new Login();
-
-if(isset($_POST['logout'])){
-  $result = $logout->logoutUser();
-
-  if(isset($result) and $result == true){
-    echo "<script>window.open('../index.php','_self')</script>";
+  }else{
+    $username = '';
+    $userEmail = '';
+    $userRank = '';
+    $userPhoneNumber = '';
+    $userAddress = '';
   }
-}
+
+  $logout = new Login();
+
+  if(isset($_POST['logout'])){
+    $result = $logout->logoutUser();
+
+    if(isset($result) and $result == true){
+      echo "<script>window.open('../index.php','_self')</script>";
+    }
+  }
+
+  $getProfile = new Profile();
+
+  $result = $getProfile->getProfileName($email);
+  if($result != 0){
+    $user_image = $result;
+  }
 
 ?>
 
@@ -51,7 +62,7 @@ if(isset($_POST['logout'])){
     - custom css link
   -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="../app/theme/assets/css/style.css?v1.3">
+  <link rel="stylesheet" href="../app/theme/assets/css/style.css?v1.4">
 
   <!-- 
     - google font link
@@ -165,12 +176,19 @@ if(isset($_POST['logout'])){
         <div class="row">
           <div class="col-md-6">
             <div class="profile-links fs-4">
-                <img src="images/<?php echo $_SESSION['user_image'] ?>" alt="" srcset="">
 
-                <button type="button" class="btn mx-auto btn-light"
-                  style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
-                  Edit profile picture
-                </button>
+                <img src='uploads/images/<?= $user_image ?>' id='userProfilePicture'>
+                <p id="errorMessage"></p>
+
+                <form action="./user-informations/update/updateImage.php" method="post" id='updatePictureForm' enctype="multipart/form-data">
+
+                    <label id="pplabel" for="newImagePicture">Choose a photo</label>
+                    <input name="uploaded-image" id="newImagePicture" class="fileInput" type="file">
+                    
+                    <input type="submit" id="submitProfilePicture" name="update-profile" value="Upload picture" class="btn mx-auto btn-primary"
+                      style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+
+                  </form>
 
                 <li><a href="../">Home</a> <i class='bx bxs-home-smile text-light'></i> </li>
                 <li><a href="../shop.php">Shop <i class='bx bxs-store-alt text-light'></i></a></li>
@@ -209,13 +227,56 @@ if(isset($_POST['logout'])){
             </div>
         </div>
     </div>
+    
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
 
-  <!-- 
-    - custom js link
-  -->
-  <script src="	https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      $(document).ready(function(){
+        $("#submitProfilePicture").click(function(e){
+          e.preventDefault();
 
-  <!-- 
+          let form_data = new FormData();
+          let imgProfile = $("#newImagePicture")[0].files;
+
+          if(imgProfile.length > 0){
+            form_data.append("newImagePicture", imgProfile[0]);
+
+            $.ajax({
+              url: './user-informations/update/updateImage.php',
+              type: 'post',
+              data: form_data,
+              contentType: false,
+              processData: false,
+              success: function(res){
+                const data = JSON.parse(res);
+
+                if(data.error != 1){
+                  let path = "./uploads/images/" + data.src;
+                  $("#userProfilePicture").attr("src", path);
+                  $("#userProfilePicture").fadeOut(1).fadeIn(1000);
+
+                }else{
+                  $("#errorMessage").text(data.em);
+                }
+
+              }
+            });
+            
+          }else{
+            $("#errorMessage").text("Please select an image.");
+          }
+
+        })
+      });
+    </script>
+    
+    <!-- 
+      - custom js link
+    -->
+    <script src="	https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- 
     - ionicon link
   -->
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
@@ -235,6 +296,7 @@ if(isset($_POST['logout'])){
             <a href="../register.php" class="btn btn-dark fs-5"> Register &nbsp; <i class='bx bxs-user-plus'></i> </a>
           </div>
   </div>
+
 
 <?php
       }
