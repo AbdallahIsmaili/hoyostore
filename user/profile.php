@@ -5,12 +5,11 @@
   include "../public/define.php";
 
   session_start();
-
-  $userProfilePicture = $_SESSION['user_image'];
-  $email = $_SESSION['user_email'];
-
+  
   if(isset($_SESSION['user_url'])){
-
+    
+    $userProfilePicture = $_SESSION['user_image'];
+    $email = $_SESSION['user_email'];
     $username = ucfirst($_SESSION['user_name']);
     $userEmail = $_SESSION['user_email'];
     $userRank = ucfirst($_SESSION['user_rank']);
@@ -18,6 +17,8 @@
     $userAddress = $_SESSION['user_address'];
 
   }else{
+    $userProfilePicture = "";
+    $email = "";
     $username = '';
     $userEmail = '';
     $userRank = '';
@@ -212,7 +213,7 @@
               <h3 class="mt-5 mb-3">Settings</h3>
               <div class="btn-group-vertical w-100" role="group" aria-label="Vertical button group">
                 <button type="button" class="btn btn-dark fs-5">My Address &nbsp; <i class='bx bxs-objects-horizontal-left fs-4'></i></button>
-                <button type="button" class="btn btn-dark fs-5">Account management &nbsp; <i class='bx bxs-message-square-edit fs-4'></i> </button>
+                <a href="./user-informations/update/costumer-info.php" class="btn btn-dark fs-5">Account management &nbsp; <i class='bx bxs-message-square-edit fs-4'></i> </a>
                 <button type="button" class="btn btn-dark fs-5">Close your account &nbsp; <i class='bx bx-window-close fs-4' ></i></button>
               </div>
                 
