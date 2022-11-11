@@ -13,6 +13,12 @@ $isValid = false;
 $verificationNumber = '';
 $sent = 'false';
 
+if(isset($_GET['email'])){
+  $e = $_GET['email'];
+}else{
+  $e = '';
+}
+
 if(isset($_POST['email'])){   
     $email = trim($_POST['email']);
 
@@ -233,7 +239,15 @@ if(isset($_POST['Restore'])){
             <form action="restore-password.php" method="POST">
 
               <p class='inputName'>Email :</p>
-                  <input type='email' name='email' class='register_field' value='' placeholder='Enter your email'>
+                  
+                  
+                  <?php
+                    if(isset($_GET['email'])){
+                      echo "<input type='email' name='email' class='register_field' value='$e' placeholder='Enter your email' readonly>";
+                    }else{
+                      echo "<input type='email' name='email' class='register_field' value='$e' placeholder='Enter your email'>";
+                    }
+                  ?>
 <!-- 
                 }else if(isset($_GET['s']) && $_GET['s'] == 'true'){
                   echo "<form action='' method='POST'>
@@ -256,7 +270,15 @@ if(isset($_POST['Restore'])){
 
                 <br>
                     <br>
-                    <button type='submit' name='Restore' class='btn btn-primary'>Restore my password</button>
+                    
+
+                    <?php
+                    if(isset($_GET['email'])){
+                      echo "<button type='submit' name='Restore' class='btn btn-primary'>Change my password</button>";
+                    }else{
+                      echo "<button type='submit' name='Restore' class='btn btn-primary'>Restore my password</button>";
+                    }
+                  ?>
 
                     <?php
 

@@ -226,8 +226,13 @@ if(isset($_POST['update-info'])){
                     <input type="password" name="confirmation_password" class="register_field" placeholder="Enter your password">
 
                     <br>
-                    <div class="form-group">
-                        <button type="submit" name="update-info" class="btn btn-primary">Update my information</button>
+                    <div class="">
+                      <div class="row row-cols-auto">
+
+                        <a href="../../restore-password.php?email=<?=$oldEmail?>" name="change-password" class="col btn btn-primary mx-3">Change Password</a>
+                        <button type="submit" name="update-info" class="col btn btn-light mx-3">Update my information</button>
+
+                      </div>
                     </div>
                 </form>
                 <br>

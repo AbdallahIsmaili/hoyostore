@@ -30,7 +30,7 @@ if(isset($_POST['register'])){
 
     if(empty($email) && empty($name) && empty($password) && empty($confirm_password)){
         $error .= "Please make sure to fill in all the boxes <br>";
-    }else if(empty($email) || !preg_match("/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/", $email)){
+    }else if(empty($email) || !preg_match("/^([a-zA-Z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/", $email)){
         $error .= "Please enter a valid email address <br>";
     }else if(empty($name) || !preg_match("/^[a-zA-Z_ ]*$/", $name)){
         $error .= "Please enter a valid name <br>";
