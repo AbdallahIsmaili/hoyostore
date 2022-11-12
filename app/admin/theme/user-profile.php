@@ -1,12 +1,11 @@
+<?php
+
+session_start();
+
+
+?>
+
 <!DOCTYPE html>
-
-<!--
- // WEBSITE: https://themefisher.com
- // TWITTER: https://twitter.com/themefisher
- // FACEBOOK: https://www.facebook.com/themefisher
- // GITHUB: https://github.com/themefisher/
--->
-
 <html lang="en" dir="ltr">
   <head>
   <meta charset="utf-8" />
@@ -1028,7 +1027,7 @@
                             <div class="media media-sm bg-warning-10 p-4 mb-0">
                               <div class="media-sm-wrapper">
                                 <a href="user-profile.html">
-                                  <img src="images/user/user-sm-02.jpg" alt="User Image">
+                                <img width="55px" src="../../../user/uploads/images/<?= $_SESSION['user_image'] ?>" alt="">
                                 </a>
                               </div>
                               <div class="media-body">
@@ -1155,7 +1154,7 @@
                             <div class="media media-sm bg-warning-10 p-4 mb-0">
                               <div class="media-sm-wrapper">
                                 <a href="user-profile.html">
-                                  <img src="images/user/user-sm-02.jpg" alt="User Image">
+                                  <img width="60px" src="../../../user/uploads/images/<?= $_SESSION['user_image'] ?>" alt="User Image">
                                 </a>
                               </div>
                               <div class="media-body">
@@ -1260,8 +1259,8 @@
                   <!-- User Account -->
                   <li class="dropdown user-menu">
                     <button class="dropdown-toggle nav-link" data-toggle="dropdown">
-                      <img src="images/user/user-xs-01.jpg" class="user-image rounded-circle" alt="User Image" />
-                      <span class="d-none d-lg-inline-block">John Doe</span>
+                      <img src="../../../user/uploads/images/<?= $_SESSION['user_image'] ?>" class="user-image rounded-circle" alt="User Image" />
+                      <span class="d-none d-lg-inline-block"><?= $_SESSION['user_name'] ?></span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-right">
                       <li>
@@ -1313,35 +1312,9 @@
   <div class="card-body card-profile-body">
 
     <div class="profile-avata">
-      <img class="rounded-circle" src="images/user/user-md-01.jpg" alt="Avata Image">
-      <span class="h5 d-block mt-3 mb-2">Albrecht Straub</span>
-      <span class="d-block">Albrecht.straub@gmail.com</span>
-    </div>
-
-    <ul class="nav nav-profile-follow">
-      <li class="nav-item">
-        <a class="nav-link" href="#">
-          <span class="h5 d-block">1503</span>
-          <span class="text-color d-block">Friends</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">
-          <span class="h5 d-block">2905</span>
-          <span class="text-color d-block">Followers</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">
-          <span class="h5 d-block">1200</span>
-          <span class="text-color d-block">Following</span>
-        </a>
-      </li>
-
-    </ul>
-
-    <div class="profile-button">
-      <a class="btn btn-primary btn-pill" href="user-planing-settings.html">Upgrade Plan</a>
+      <img class="rounded-circle" width="200px" src="../../../user/uploads/images/<?= $_SESSION['user_image'] ?>" alt=""></a>
+      <span class="h5 d-block mt-3 mb-2"><?= $_SESSION['user_name'] ?></span>
+      <span class="d-block"><?= $_SESSION['user_email'] ?></span>
     </div>
 
   </div>

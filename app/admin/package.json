@@ -1,7 +1,7 @@
 {
-  "name": "mono",
+  "name": "hoyostore",
   "version": "1.0.0",
-  "description": "Mono Free Bootstrap Admin Dashboard Template",
+  "description": "HoyoStore Admin Dashboard",
   "author": "Themefisher",
   "license": "MIT",
   "scripts": {

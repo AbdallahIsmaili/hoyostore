@@ -156,7 +156,7 @@
 <div class="container mb-5">
 
     <div class="user mt-3">
-      <h2>Welcome <u><?php echo ucfirst($username); ?></u> </h2>
+      <h2>Welcome <u><?php echo ucfirst($username); ?></u></h2>
       <h5>> <?php echo $userEmail; ?></h5>
 
       <?php
@@ -212,6 +212,11 @@
 
               <h3 class="mt-5 mb-3">Settings</h3>
               <div class="btn-group-vertical w-100" role="group" aria-label="Vertical button group">
+                <?php 
+                  if(isset($_SESSION['user_rank']) && $_SESSION['user_rank'] == 'admin'){
+                      echo "<a href='../app/admin/theme/index.php' class='btn btn-primary fs-5'>Admin Dashboard &nbsp; <i class='bx bxs-objects-horizontal-left fs-4'></i></a>";
+                  }
+                ?>
                 <button type="button" class="btn btn-dark fs-5">My Address &nbsp; <i class='bx bxs-objects-horizontal-left fs-4'></i></button>
                 <a href="./user-informations/update/costumer-info.php" class="btn btn-dark fs-5">Account management &nbsp; <i class='bx bxs-message-square-edit fs-4'></i> </a>
                 <button type="button" class="btn btn-dark fs-5">Close your account &nbsp; <i class='bx bx-window-close fs-4' ></i></button>
@@ -286,6 +291,7 @@
 <?php
 
       }else{
+
 ?>
 
   <h1 class="container mt-5">Hello &#128149; </h1>

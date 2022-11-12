@@ -1,22 +1,22 @@
+<?php
+
+  session_start();
+
+  if(isset($_SESSION['user_url'])){
+    $user_image = $_SESSION['user_image']; 
+?>
+
 <!DOCTYPE html>
-
-<!--
- // WEBSITE: https://themefisher.com
- // TWITTER: https://twitter.com/themefisher
- // FACEBOOK: https://www.facebook.com/themefisher
- // GITHUB: https://github.com/themefisher/
--->
-
 <html lang="en" dir="ltr">
   <head>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <title>Mono - Responsive Admin & Dashboard Template</title>
+  <title>HoyoStore - Admin & Dashboard</title>
     
   <!-- theme meta -->
-  <meta name="theme-name" content="mono" />
+  <meta name="theme-name" content="hoyo" />
 
   <!-- GOOGLE FONTS -->
   <link href="https://fonts.googleapis.com/css?family=Karla:400,700|Roboto" rel="stylesheet">
@@ -48,7 +48,7 @@
   <link href="plugins/toaster/toastr.min.css" rel="stylesheet" />
   
   
-  <!-- MONO CSS -->
+  <!-- hoyo CSS -->
   <link id="main-css-href" rel="stylesheet" href="css/style.css" />
 
   
@@ -92,9 +92,9 @@
           <div id="sidebar" class="sidebar sidebar-with-footer">
             <!-- Aplication Brand -->
             <div class="app-brand">
-              <a href="/index.html">
-                <img src="images/logo.png" alt="Mono">
-                <span class="brand-name">MONO</span>
+              <a href="/index.php">
+                <img src="images/logo.png" alt="hoyo">
+                <span class="brand-name">hoyo</span>
               </a>
             </div>
             <!-- begin sidebar scrollbar -->
@@ -102,12 +102,10 @@
               <!-- sidebar menu -->
               <ul class="nav sidebar-inner" id="sidebar-menu">
                 
-
-                
                   <li
                    class="active"
                    >
-                    <a class="sidenav-item-link" href="index.html">
+                    <a class="sidenav-item-link" href="index.php">
                       <i class="mdi mdi-briefcase-account-outline"></i>
                       <span class="nav-text">Business Dashboard</span>
                     </a>
@@ -654,7 +652,103 @@
                   </li>
                 
 
-                
+                  <li  class="has-sub" >
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#business"
+                      aria-expanded="false" aria-controls="business">
+                      <i class="mdi mdi-briefcase-plus"></i>
+                      <span class="nav-text">Business</span> <b class="caret"></b>
+                    </a>
+                    <ul  class="collapse"  id="business"
+                      data-parent="#sidebar-menu">
+                      <div class="sub-menu">
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-profile.html">
+                                <span class="nav-text">Our Products</span>
+                                
+                              </a>
+                            </li>
+                          
+                        
+
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-activities.html">
+                                <span class="nav-text">Add Products</span>
+                                
+                              </a>
+                            </li>
+                          
+                        
+
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-profile-settings.html">
+                                <span class="nav-text">Update Product</span>
+                                
+                              </a>
+                            </li>
+                          
+                        
+
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-account-settings.html">
+                                <span class="nav-text">Remove Product</span>
+                                
+                              </a>
+                            </li>
+                          
+                        
+
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-planing-settings.html">
+                                <span class="nav-text">Coupons</span>
+                                
+                              </a>
+                            </li>
+                          
+                        
+
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-billing.html">
+                                <span class="nav-text">Event a Product</span>
+                                
+                              </a>
+                            </li>
+                          
+                        
+
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-notify-settings.html">
+                                <span class="nav-text">Production</span>
+                                
+                              </a>
+                            </li>
+                          
+                        
+
+                        
+                      </div>
+                    </ul>
+                  </li>
 
                 
                   <li  class="has-sub" >
@@ -990,7 +1084,7 @@
 
                 <!-- search form -->
                 <div class="search-form">
-                  <form action="index.html" method="get">
+                  <form action="index.php" method="get">
                     <div class="input-group input-group-sm" id="input-group-search">
                       <input type="text" autocomplete="off" name="query" id="search-input" class="form-control" placeholder="Search..." />
                       <div class="input-group-append">
@@ -1001,16 +1095,16 @@
                   <ul class="dropdown-menu dropdown-menu-search">
 
                     <li class="nav-item">
-                      <a class="nav-link" href="index.html">Morbi leo risus</a>
+                      <a class="nav-link" href="index.php">Morbi leo risus</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="index.html">Dapibus ac facilisis in</a>
+                      <a class="nav-link" href="index.php">Dapibus ac facilisis in</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="index.html">Porta ac consectetur ac</a>
+                      <a class="nav-link" href="index.php">Porta ac consectetur ac</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="index.html">Vestibulum at eros</a>
+                      <a class="nav-link" href="index.php">Vestibulum at eros</a>
                     </li>
 
                   </ul>
@@ -1050,12 +1144,12 @@
                             <div class="media media-sm bg-warning-10 p-4 mb-0">
                               <div class="media-sm-wrapper">
                                 <a href="user-profile.html">
-                                  <img src="images/user/user-sm-02.jpg" alt="User Image">
+                                  <img src="../../../user/uploads/images/<?= $user_image ?>" alt="">
                                 </a>
                               </div>
                               <div class="media-body">
                                 <a href="user-profile.html">
-                                  <span class="title mb-0">John Doe</span>
+                                  <span class="title mb-0"><?= $_SESSION['user_name'] ?></span>
                                   <span class="discribe">Extremity sweetness difficult behaviour he of. On disposal of as landlord horrible. Afraid at highly months do things on at.</span>
                                   <span class="time">
                                     <time>Just now</time>...
@@ -1177,7 +1271,9 @@
                             <div class="media media-sm bg-warning-10 p-4 mb-0">
                               <div class="media-sm-wrapper">
                                 <a href="user-profile.html">
-                                  <img src="images/user/user-sm-02.jpg" alt="User Image">
+
+                                  <img src="../../../user/uploads/images/<?= $user_image ?>" alt="User Image">
+
                                 </a>
                               </div>
                               <div class="media-body">
@@ -1282,12 +1378,12 @@
                   <!-- User Account -->
                   <li class="dropdown user-menu">
                     <button class="dropdown-toggle nav-link" data-toggle="dropdown">
-                      <img src="images/user/user-xs-01.jpg" class="user-image rounded-circle" alt="User Image" />
-                      <span class="d-none d-lg-inline-block">John Doe</span>
+                      <img src="../../../user/uploads/images/<?= $_SESSION['user_image'] ?>" class="user-image rounded-circle" alt="User Image" />
+                      <span class="d-none d-lg-inline-block"><?= $_SESSION['user_name'] ?></span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-right">
                       <li>
-                        <a class="dropdown-link-item" href="user-profile.html">
+                        <a class="dropdown-link-item" href="user-profile.php">
                           <i class="mdi mdi-account-outline"></i>
                           <span class="nav-text">My Profile</span>
                         </a>
@@ -1333,7 +1429,7 @@
                     <div class="col-xl-3 col-sm-6">
                       <div class="card card-default card-mini">
                         <div class="card-header">
-                          <h2>$18,699</h2>
+                          <h2>$18,677</h2>
                           <div class="dropdown">
                             <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             </a>
@@ -2413,7 +2509,7 @@
           <footer class="footer mt-auto">
             <div class="copyright bg-white">
               <p>
-                &copy; <span id="copy-year"></span> Copyright Mono Dashboard Bootstrap Template by <a class="text-primary" href="http://www.iamabdus.com/" target="_blank" >Abdus</a>.
+                &copy; <span id="copy-year"></span> Copyright hoyo Dashboard Bootstrap Template by <a class="text-primary" href="http://www.iamabdus.com/" target="_blank" >Abdus</a>.
               </p>
             </div>
             <script>
@@ -2584,7 +2680,7 @@
 
                     
                     
-                    <script src="js/mono.js"></script>
+                    <script src="js/hoyo.js"></script>
                     <script src="js/chart.js"></script>
                     <script src="js/map.js"></script>
                     <script src="js/custom.js"></script>
@@ -2597,3 +2693,11 @@
 
   </body>
 </html>
+
+<?php
+
+      }else{
+        echo "<script>window.open('../../../index.php', '_self')</script>";
+      }
+        
+?>
