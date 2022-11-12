@@ -653,12 +653,12 @@
                 
 
                   <li  class="has-sub" >
-                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#business"
-                      aria-expanded="false" aria-controls="business">
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#products"
+                      aria-expanded="false" aria-controls="products">
                       <i class="mdi mdi-briefcase-plus"></i>
-                      <span class="nav-text">Business</span> <b class="caret"></b>
+                      <span class="nav-text">Product management</span> <b class="caret"></b>
                     </a>
-                    <ul  class="collapse"  id="business"
+                    <ul  class="collapse"  id="products"
                       data-parent="#sidebar-menu">
                       <div class="sub-menu">
                         
@@ -707,22 +707,6 @@
                               </a>
                             </li>
                           
-                        
-
-                        
-                        
-                          
-                            <li >
-                              <a class="sidenav-item-link" href="user-planing-settings.html">
-                                <span class="nav-text">Coupons</span>
-                                
-                              </a>
-                            </li>
-                          
-                        
-
-                        
-                        
                           
                             <li >
                               <a class="sidenav-item-link" href="user-billing.html">
@@ -750,6 +734,171 @@
                     </ul>
                   </li>
 
+                  <li  class="has-sub" >
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#business"
+                      aria-expanded="false" aria-controls="business">
+                      <i class="mdi mdi-briefcase-plus"></i>
+                      <span class="nav-text">Business</span> <b class="caret"></b>
+                    </a>
+                    <ul  class="collapse"  id="business"
+                      data-parent="#sidebar-menu">
+                      <div class="sub-menu">
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-profile.html">
+                                <span class="nav-text">Our Suppliers</span>
+                                
+                              </a>
+                            </li>
+                          
+                        
+
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-activities.html">
+                                <span class="nav-text">Add Supplier</span>
+                                
+                              </a>
+                            </li>
+                          
+                        
+
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-profile-settings.html">
+                                <span class="nav-text">Update Supplier</span>
+                                
+                              </a>
+                            </li>
+                          
+                        
+
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-account-settings.html">
+                                <span class="nav-text">Remove Supplier</span>
+                                
+                              </a>
+                            </li>
+                          
+                        
+
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-planing-settings.html">
+                                <span class="nav-text">Coupons</span>
+                                
+                              </a>
+                            </li>
+                          
+                        
+
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-billing.html">
+                                <span class="nav-text">Event a Supplier</span>
+                                
+                              </a>
+                            </li>
+                        
+                      </div>
+                    </ul>
+                  </li>
+
+                  <li  class="has-sub" >
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#categories"
+                      aria-expanded="false" aria-controls="categories">
+                      <i class="mdi mdi-briefcase-plus"></i>
+                      <span class="nav-text">Categories</span> <b class="caret"></b>
+                    </a>
+                    <ul  class="collapse"  id="categories"
+                      data-parent="#sidebar-menu">
+                      <div class="sub-menu">
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-profile.html">
+                                <span class="nav-text">Our Categories</span>
+                                
+                              </a>
+                            </li>
+                          
+                        
+
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-activities.html">
+                                <span class="nav-text">Add Category</span>
+                                
+                              </a>
+                            </li>
+                          
+                        
+
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-profile-settings.html">
+                                <span class="nav-text">Update Category</span>
+                                
+                              </a>
+                            </li>
+                          
+                        
+
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-account-settings.html">
+                                <span class="nav-text">Remove Category</span>
+                                
+                              </a>
+                            </li>
+                          
+                        
+
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-planing-settings.html">
+                                <span class="nav-text">Category Coupons</span>
+                                
+                              </a>
+                            </li>
+                          
+                        
+
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-billing.html">
+                                <span class="nav-text">Event a Category</span>
+                                
+                              </a>
+                            </li>
+                        
+                      </div>
+                    </ul>
+                  </li>
                 
                   <li  class="has-sub" >
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#users"
