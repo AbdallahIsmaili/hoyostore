@@ -8,6 +8,7 @@ include "../../classes/supplierClass.php";
 $addSupplier = new Suppliers();
 
 $error = "";
+$validationError = "";
 
 if(isset($_POST['submit-supplier-form'])){
 
@@ -30,27 +31,62 @@ if(isset($_POST['submit-supplier-form'])){
     $discountAvailable = 0;
     $logo = trim($_POST['company-logo']);
 
-    if(empty($supplierEmail) && empty($name) && empty($password) && empty($confirm_password)){
+
+    if(empty($supplierEmail) && empty($companyName) && empty($contactFName) && empty($contactLName) && empty($addressOne) && empty($addressTwo) && empty($country) && empty($city) && empty($state) && empty($codePostal) && empty($supplierEmail) && empty($contactTitle) && empty($website) && empty($date) && empty($phoneNumber) && empty($faxNumber) && empty($paymentMethod) && empty($logo)){
         $error .= "Please make sure to fill in all the boxes <br>";
-    }else if(empty($supplierEmail) || !preg_match("/^([a-zA-Z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/", $supplierEmail)){
-        $error .= "Please enter a valid supplierEmail address <br>";
-    }else if(empty($name) || !preg_match("/^[a-zA-Z_ ]*$/", $name)){
+
+    }else if(empty($supplierEmail) || !preg_match("/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/i", $supplierEmail)){
+        $error .= "Please enter a valid email address <br>";
+
+    }else if(empty($companyName) || !preg_match("/^[a-zA-Z_ ]*$/", $companyName)){
+        $error .= "Please enter a valid company name <br>";
+
+    }else if(empty($contactFName) || !preg_match("/^[a-zA-Z_ ]*$/", $contactFName)){
         $error .= "Please enter a valid name <br>";
-    }else if(strlen($password) < 8){
-        $error .= "Password must be at least 8 characters long <br>";
-    }else if($password !== $confirm_password){
-        $error .= "Passwords do not match <br>";
-    }else if(empty($password)){
-        $error .= "Please enter a password <br>";
-    }else if(empty($confirm_password)){
-        $error .= "Please enter a confirmation password <br>";
+
+    }else if(empty($contactLName) || !preg_match("/^[a-zA-Z_ ]*$/", $contactLName)){
+        $error .= "Please enter a valid name <br>";
+
+    }else if(empty($addressOne) || empty($addressTwo)){
+        $error .= "Please enter the address #1, #2 <br>";
+
+    }else if(empty($country)){
+        $error .= "Please enter the country <br>";
+
+    }else if(empty($state)){
+        $error .= "Please enter the state <br>";
+
+    }else if(empty($city)){
+        $error .= "Please enter the city <br>";
+
+    }else if(empty($codePostal)){
+        $error .= "Please enter the code postal <br>";
+
+    }else if(empty($phoneNumber)){
+        $error .= "Please enter the phone number <br>";
+
+    }else if(empty($faxNumber)){
+        $error .= "Please enter the fax number <br>";
+
+    }else if(empty($contactTitle)){
+        $error .= "Please enter the contact title <br>";
+
+    }else if(empty($website)){
+        $error .= "Please enter the company website <br>";
+
+    }else if(empty($paymentMethod) || !preg_match("/^[0-9]{16}$/", $paymentMethod)){
+        $error .= "Please enter a valid payment credit card <br>";
+
+    }else if(empty($logo)){
+        $error .= "Please enter the company logo <br>";
+
     }
 
     if(empty($error)){
-        $result = $register->registerUser($name, $supplierEmail, $phoneNumber, $userAddress, $password, $confirm_password, $date, $image, $validation, $verificationKey);
+        $result = $addSupplier->registerSupplier($companyName, $contactTitle, $contactFName, $contactLName, $addressOne, $addressTwo, $country, $state, $city, $codePostal, $supplierEmail, $phoneNumber, $faxNumber, $website, $paymentMethod, $discountAvailable, $date, $logo);
 
         if($result == 1){
-          $validationError .= "Used supplierEmail has been already taken! <a href='login.php?supplierEmail=$supplierEmail'> [ Log in with that supplierEmail. ] </a> <br>";
+          $validationError .= "We already have a companionship with that company. <br>";
         }
         
     }
@@ -1599,6 +1635,20 @@ if(isset($_SESSION['user_url'])){
 
 
           </header>
+
+          <?php
+            if($error != ''){
+                echo "<div class='alert alert-danger alert-icon' role='alert'>
+                <i class='mdi mdi-diameter-variant'></i> $error
+            </div><br>";
+            }
+            if($validationError != ''){
+                echo "<div class='alert alert-warning alert-icon' role='alert'>
+                <i class='mdi mdi-alert-decagram-outline'></i> $validationError
+              </div>";
+            }
+          ?>
+            
 
         <!-- ====================================
         ——— CONTENT WRAPPER
