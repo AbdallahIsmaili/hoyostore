@@ -759,7 +759,7 @@
                         
                           
                             <li >
-                              <a class="sidenav-item-link" href="user-activities.html">
+                              <a class="sidenav-item-link" href="add-supplier.php">
                                 <span class="nav-text">Add Supplier</span>
                                 
                               </a>

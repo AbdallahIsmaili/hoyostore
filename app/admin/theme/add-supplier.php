@@ -1,11 +1,67 @@
-<?php
+<?php 
 
 session_start();
 
+include "../../classes/databaseClass.php"; 
+include "../../classes/supplierClass.php"; 
+
+$addSupplier = new Suppliers();
+
+$error = "";
+
+if(isset($_POST['submit-supplier-form'])){
+
+    $companyName = trim($_POST['company-name']);
+    $contactFName = trim($_POST['contact-first-name']);
+    $contactLName = trim($_POST['contact-last-name']);
+    $addressOne = trim($_POST['supplier-address-one']);
+    $addressTwo = trim($_POST['supplier-address-two']);
+    $country = trim($_POST['supplier-country']);
+    $city = trim($_POST['supplier-city']);
+    $state = trim($_POST['supplier-state']);
+    $codePostal = trim($_POST['supplier-code-postal']);
+    $supplierEmail = trim($_POST['supplier-email']);
+    $contactTitle = trim($_POST['contact-title']);
+    $website = trim($_POST['supplier-website']);
+    $date = date("Y-m-d H:i:s");
+    $phoneNumber = trim($_POST['supplier-phone']);
+    $faxNumber = trim($_POST['supplier-fax']);
+    $paymentMethod = trim($_POST['payment-method']);
+    $discountAvailable = 0;
+    $logo = trim($_POST['company-logo']);
+
+    if(empty($supplierEmail) && empty($name) && empty($password) && empty($confirm_password)){
+        $error .= "Please make sure to fill in all the boxes <br>";
+    }else if(empty($supplierEmail) || !preg_match("/^([a-zA-Z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/", $supplierEmail)){
+        $error .= "Please enter a valid supplierEmail address <br>";
+    }else if(empty($name) || !preg_match("/^[a-zA-Z_ ]*$/", $name)){
+        $error .= "Please enter a valid name <br>";
+    }else if(strlen($password) < 8){
+        $error .= "Password must be at least 8 characters long <br>";
+    }else if($password !== $confirm_password){
+        $error .= "Passwords do not match <br>";
+    }else if(empty($password)){
+        $error .= "Please enter a password <br>";
+    }else if(empty($confirm_password)){
+        $error .= "Please enter a confirmation password <br>";
+    }
+
+    if(empty($error)){
+        $result = $register->registerUser($name, $supplierEmail, $phoneNumber, $userAddress, $password, $confirm_password, $date, $image, $validation, $verificationKey);
+
+        if($result == 1){
+          $validationError .= "Used supplierEmail has been already taken! <a href='login.php?supplierEmail=$supplierEmail'> [ Log in with that supplierEmail. ] </a> <br>";
+        }
+        
+    }
+    
+}
+
 if(isset($_SESSION['user_url'])){
-  $user_image = $_SESSION['user_image']; 
+    $user_image = $_SESSION['user_image']; 
 
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -14,7 +70,7 @@ if(isset($_SESSION['user_url'])){
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <title>Mono - Responsive Admin & Dashboard Template</title>
+  <title>Admin - add supplier</title>
 
   <!-- GOOGLE FONTS -->
   <link href="https://fonts.googleapis.com/css?family=Karla:400,700|Roboto" rel="stylesheet">
@@ -25,9 +81,7 @@ if(isset($_SESSION['user_url'])){
   <link href="plugins/nprogress/nprogress.css" rel="stylesheet" />
   
   
-  <link href="plugins/DataTables/DataTables-1.10.18/css/jquery.dataTables.min.css" rel="stylesheet" />
-  
-  
+  <link href="plugins/prism/prism.css" rel="stylesheet" />
   
   
   <!-- MONO CSS -->
@@ -72,9 +126,9 @@ if(isset($_SESSION['user_url'])){
           <div id="sidebar" class="sidebar sidebar-with-footer">
             <!-- Aplication Brand -->
             <div class="app-brand">
-              <a href="/index.html">
-                <img src="images/logo.png" alt="Mono">
-                <span class="brand-name">MONO</span>
+              <a href="/index.php">
+                <img src="images/logo.png" alt="hoyo">
+                <span class="brand-name">hoyo</span>
               </a>
             </div>
             <!-- begin sidebar scrollbar -->
@@ -82,11 +136,10 @@ if(isset($_SESSION['user_url'])){
               <!-- sidebar menu -->
               <ul class="nav sidebar-inner" id="sidebar-menu">
                 
-
-                
                   <li
+                   class="active"
                    >
-                    <a class="sidenav-item-link" href="index.html">
+                    <a class="sidenav-item-link" href="index.php">
                       <i class="mdi mdi-briefcase-account-outline"></i>
                       <span class="nav-text">Business Dashboard</span>
                     </a>
@@ -165,7 +218,7 @@ if(isset($_SESSION['user_url'])){
 
                 
                   <li  class="has-sub" >
-                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#email"
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#supplierEmail"
                       aria-expanded="false" aria-controls="email">
                       <i class="mdi mdi-email"></i>
                       <span class="nav-text">email</span> <b class="caret"></b>
@@ -633,22 +686,267 @@ if(isset($_SESSION['user_url'])){
                   </li>
                 
 
-                
-
-                
-                  <li  class="has-sub active expand" >
-                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#users"
-                      aria-expanded="false" aria-controls="users">
-                      <i class="mdi mdi-image-filter-none"></i>
-                      <span class="nav-text">User</span> <b class="caret"></b>
+                  <li  class="has-sub" >
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#products"
+                      aria-expanded="false" aria-controls="products">
+                      <i class="mdi mdi-briefcase-plus"></i>
+                      <span class="nav-text">Product management</span> <b class="caret"></b>
                     </a>
-                    <ul  class="collapse show"  id="users"
+                    <ul  class="collapse"  id="products"
                       data-parent="#sidebar-menu">
                       <div class="sub-menu">
                         
                         
                           
-                            <li  class="active" >
+                            <li >
+                              <a class="sidenav-item-link" href="user-profile.html">
+                                <span class="nav-text">Our Products</span>
+                                
+                              </a>
+                            </li>
+                          
+                        
+
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-activities.html">
+                                <span class="nav-text">Add Products</span>
+                                
+                              </a>
+                            </li>
+                          
+                        
+
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-profile-settings.html">
+                                <span class="nav-text">Update Product</span>
+                                
+                              </a>
+                            </li>
+                          
+                        
+
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-account-settings.html">
+                                <span class="nav-text">Remove Product</span>
+                                
+                              </a>
+                            </li>
+                          
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-billing.html">
+                                <span class="nav-text">Event a Product</span>
+                                
+                              </a>
+                            </li>
+                          
+                        
+
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-notify-settings.html">
+                                <span class="nav-text">Production</span>
+                                
+                              </a>
+                            </li>
+                          
+                        
+
+                        
+                      </div>
+                    </ul>
+                  </li>
+
+                  <li  class="has-sub" >
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#business"
+                      aria-expanded="false" aria-controls="business">
+                      <i class="mdi mdi-briefcase-plus"></i>
+                      <span class="nav-text">Business</span> <b class="caret"></b>
+                    </a>
+                    <ul  class="collapse"  id="business"
+                      data-parent="#sidebar-menu">
+                      <div class="sub-menu">
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-profile.html">
+                                <span class="nav-text">Our Suppliers</span>
+                                
+                              </a>
+                            </li>
+                          
+                        
+
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="add-supplier.php">
+                                <span class="nav-text">Add Supplier</span>
+                                
+                              </a>
+                            </li>
+                          
+                        
+
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-profile-settings.html">
+                                <span class="nav-text">Update Supplier</span>
+                                
+                              </a>
+                            </li>
+                          
+                        
+
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-account-settings.html">
+                                <span class="nav-text">Remove Supplier</span>
+                                
+                              </a>
+                            </li>
+                          
+                        
+
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-planing-settings.html">
+                                <span class="nav-text">Coupons</span>
+                                
+                              </a>
+                            </li>
+                          
+                        
+
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-billing.html">
+                                <span class="nav-text">Event a Supplier</span>
+                                
+                              </a>
+                            </li>
+                        
+                      </div>
+                    </ul>
+                  </li>
+
+                  <li  class="has-sub" >
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#categories"
+                      aria-expanded="false" aria-controls="categories">
+                      <i class="mdi mdi-briefcase-plus"></i>
+                      <span class="nav-text">Categories</span> <b class="caret"></b>
+                    </a>
+                    <ul  class="collapse"  id="categories"
+                      data-parent="#sidebar-menu">
+                      <div class="sub-menu">
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-profile.html">
+                                <span class="nav-text">Our Categories</span>
+                                
+                              </a>
+                            </li>
+                          
+                        
+
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-activities.html">
+                                <span class="nav-text">Add Category</span>
+                                
+                              </a>
+                            </li>
+                          
+                        
+
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-profile-settings.html">
+                                <span class="nav-text">Update Category</span>
+                                
+                              </a>
+                            </li>
+                          
+                        
+
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-account-settings.html">
+                                <span class="nav-text">Remove Category</span>
+                                
+                              </a>
+                            </li>
+                          
+                        
+
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-planing-settings.html">
+                                <span class="nav-text">Category Coupons</span>
+                                
+                              </a>
+                            </li>
+                          
+                        
+
+                        
+                        
+                          
+                            <li >
+                              <a class="sidenav-item-link" href="user-billing.html">
+                                <span class="nav-text">Event a Category</span>
+                                
+                              </a>
+                            </li>
+                        
+                      </div>
+                    </ul>
+                  </li>
+                
+                  <li  class="has-sub" >
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#users"
+                      aria-expanded="false" aria-controls="users">
+                      <i class="mdi mdi-image-filter-none"></i>
+                      <span class="nav-text">User</span> <b class="caret"></b>
+                    </a>
+                    <ul  class="collapse"  id="users"
+                      data-parent="#sidebar-menu">
+                      <div class="sub-menu">
+                        
+                        
+                          
+                            <li >
                               <a class="sidenav-item-link" href="user-profile.html">
                                 <span class="nav-text">User Profile</span>
                                 
@@ -963,7 +1261,7 @@ if(isset($_SESSION['user_url'])){
                 <span class="sr-only">Toggle navigation</span>
               </button>
 
-              <span class="page-title">user profile</span>
+              <span class="page-title">Add Supplier</span>
 
               <div class="navbar-right ">
 
@@ -1029,7 +1327,7 @@ if(isset($_SESSION['user_url'])){
                             <div class="media media-sm bg-warning-10 p-4 mb-0">
                               <div class="media-sm-wrapper">
                                 <a href="user-profile.html">
-                                <img width="55px" src="../../../user/uploads/images/<?= $_SESSION['user_image'] ?>" alt="">
+                                  <img src="images/user/user-sm-02.jpg" alt="User Image">
                                 </a>
                               </div>
                               <div class="media-body">
@@ -1156,7 +1454,7 @@ if(isset($_SESSION['user_url'])){
                             <div class="media media-sm bg-warning-10 p-4 mb-0">
                               <div class="media-sm-wrapper">
                                 <a href="user-profile.html">
-                                  <img width="60px" src="../../../user/uploads/images/<?= $_SESSION['user_image'] ?>" alt="User Image">
+                                  <img src="images/user/user-sm-02.jpg" alt="User Image">
                                 </a>
                               </div>
                               <div class="media-body">
@@ -1262,11 +1560,11 @@ if(isset($_SESSION['user_url'])){
                   <li class="dropdown user-menu">
                     <button class="dropdown-toggle nav-link" data-toggle="dropdown">
                       <img src="../../../user/uploads/images/<?= $_SESSION['user_image'] ?>" class="user-image rounded-circle" alt="User Image" />
-                      <span class="d-none d-lg-inline-block"><?= $_SESSION['user_name'] ?></span>
+                      <span class="d-none d-lg-inline-block"><?=$_SESSION['user_name']?></span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-right">
                       <li>
-                        <a class="dropdown-link-item" href="user-profile.html">
+                        <a class="dropdown-link-item" href="user-profile.php">
                           <i class="mdi mdi-account-outline"></i>
                           <span class="nav-text">My Profile</span>
                         </a>
@@ -1306,856 +1604,292 @@ if(isset($_SESSION['user_url'])){
         ——— CONTENT WRAPPER
         ===================================== -->
         <div class="content-wrapper">
-          <div class="content"><!-- Card Profile -->
-<div class="card card-default card-profile">
+          <div class="content"><!-- For Components documentaion -->
 
-  <div class="card-header-bg" style="background-image:url(assets/img/user/user-bg-01.jpg)"></div>
 
-  <div class="card-body card-profile-body">
+          <div class="row">
+              <form action="" method="POST">
+  <div class="col-xl-12">
+    <!-- Add Supplyer -->
 
-    <div class="profile-avata">
-      <img class="rounded-circle" width="200px" src="../../../user/uploads/images/<?= $_SESSION['user_image'] ?>" alt=""></a>
-      <span class="h5 d-block mt-3 mb-2"><?= $_SESSION['user_name'] ?></span>
-      <span class="d-block"><?= $_SESSION['user_email'] ?></span>
-    </div>
-
-  </div>
-
-  <div class="card-footer card-profile-footer">
-    <ul class="nav nav-border-top justify-content-center">
-      <li class="nav-item">
-        <a class="nav-link active" href="user-profile.html">Profile</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="user-activities.html">Activities</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="user-profile-settings.html">Settings</a>
-      </li>
-
-    </ul>
-  </div>
-
-</div>
-
-<div class="row">
-  <div class="col-xl-3 col-md-6">
     <div class="card card-default">
-      <div class="d-flex p-5">
-        <div class="icon-md bg-secondary rounded-circle mr-3">
-          <i class="mdi mdi-account-plus-outline"></i>
-        </div>
-        <div class="text-left">
-          <span class="h2 d-block">890</span>
-          <p>New Users</p>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-xl-3 col-md-6">
-    <div class="card card-default">
-      <div class="d-flex p-5">
-        <div class="icon-md bg-success rounded-circle mr-3">
-          <i class="mdi mdi-table-edit"></i>
-        </div>
-        <div class="text-left">
-          <span class="h2 d-block">350</span>
-          <p>Order Placed</p>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-xl-3 col-md-6">
-    <div class="card card-default">
-      <div class="d-flex p-5">
-        <div class="icon-md bg-primary rounded-circle mr-3">
-          <i class="mdi mdi-content-save-edit-outline"></i>
-        </div>
-        <div class="text-left">
-          <span class="h2 d-block">1360</span>
-          <p>Total Sales</p>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-xl-3 col-md-6">
-    <div class="card card-default">
-      <div class="d-flex p-5">
-        <div class="icon-md bg-info rounded-circle mr-3">
-          <i class="mdi mdi-bell"></i>
-        </div>
-        <div class="text-left">
-          <span class="h2 d-block">$8930</span>
-          <p>Monthly Revenue</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-lg-6">
-    <!-- Notification -->
-    <div class="card card-default" data-scroll-height="530">
       <div class="card-header">
-        <h2 class="mb-5">Notification</h2>
-      </div>
+        <h2>about Supplier</h2>
+        <a class="btn mdi mdi-code-tags" data-toggle="collapse" href="#collapse-basic-input" role="button"
+          aria-expanded="false" aria-controls="collapse-basic-input"> </a>
 
-      <div class="card-body slim-scroll">
-        <ul class="list-group">
-          <li class="list-group-item list-group-item-action">
-            <div class="media media-sm mb-0">
-              <div class="media-sm-wrapper">
-                <img src="images/user/user-sm-01.jpg" alt="User Image">
-              </div>
-              <div class="media-body">
-                <span class="title">The stars are twinkling.</span>
-                <p>Extremity sweetness difficult behaviour he of. On disposal of as landlord horrible. Afraid at highly months do things on at.</p>
-              </div>
-            </div>
-          </li>
-          <li class="list-group-item list-group-item-action">
-            <div class="media media-sm mb-0">
-              <div class="media-sm-wrapper">
-                <img src="images/user/user-sm-02.jpg" alt="User Image">
-              </div>
-              <div class="media-body">
-                <span class="title">This is a Japanese doll.</span>
-                <p>Marianne or husbands if at stronger ye. Considered is as middletons uncommonly. Promotion perfectly ye
-                  consisted so.</p>
-              </div>
-            </div>
-          </li>
-          <li class="list-group-item list-group-item-action">
-            <div class="media media-sm mb-0">
-              <div class="media-sm-wrapper">
-                <img src="images/user/user-sm-03.jpg" alt="User Image">
-              </div>
-              <div class="media-body">
-                <span class="title">Support Ticket</span>
-                <p>Unpleasant nor diminution excellence apartments imprudence the met new. Draw part them he an to he roof
-                  only.
-                  Music
-                  leave say doors him.</p>
-              </div>
-            </div>
-          </li>
-          <li class="list-group-item list-group-item-action">
-            <div class="media media-sm mb-0">
-              <div class="media-sm-wrapper">
-                <img src="images/user/user-sm-04.jpg" alt="User Image">
-              </div>
-              <div class="media-body">
-                <span class="title">New Order</span>
-                <p>Farther related bed and passage comfort civilly. Dashwoods see frankness objection abilities the. As
-                  hastened
-                  oh
-                  produced prospect formerly up am.</p>
-              </div>
-            </div>
-          </li>
-        </ul>
+
+      </div>
+      <div class="card-body">
+
+          <div class="form-group">
+            <label for="exampleFormControlInput2">Company name</label>
+            <input type="text" name="company-name" class="form-control" id="exampleFormControlInput2" placeholder="Enter Company name">
+            <span class="mt-2 d-block">Make sure to enter it exactly.</span>
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlPassword">Address #1</label>
+            <input type="address" name="supplier-address-one" class="form-control" id="exampleFormControlPassword" placeholder="First address">
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlPassword">Address #2</label>
+            <input type="address" name="supplier-address-two" class="form-control" id="exampleFormControlPassword" placeholder="First address">
+          </div>
 
       </div>
     </div>
-  </div>
-  <div class="col-lg-6">
-    <!-- To Do list -->
-    <div class="card card-default pb-4" id="todo">
-      <div class="card-header mb-3">
-        <h2>To Do list</h2>
 
-        <a class="btn btn-primary btn-pill" id="add-task" href="#" role="button"> Add task </a>
+    <!-- Custom Styles -->
+    <div class="card card-default">
+      <div class="card-header">
+        <h2>Supplier information</h2>
+        <a class="btn mdi mdi-code-tags" data-toggle="collapse" href="#collapse-custom-input" role="button"
+          aria-expanded="false" aria-controls="collapse-custom-input"> </a>
+
+
       </div>
-
-      <div class="card-body" data-simplebar style="height: 385px;">
-        <div class="todo-single-item d-none" id="todo-input">
-          <form>
-            <div class="form-group">
-              <input type="text" class="form-control" placeholder="Enter Todo" autofocus>
+      <div class="card-body">
+        
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="fcountry">Country</label>
+                <input type="text" name="supplier-country" class="form-control" placeholder="Country">
+              </div>
             </div>
-          </form>
-        </div>
-        <div class="todo-list" id="todo-list">
-          <div class="todo-single-item d-flex flex-row justify-content-between finished">
-            <i class="mdi"></i>
-            <span>Finish Dashboard UI Kit update</span>
-            <span class="badge badge-primary">Finished</span>
-          </div>
-          <div class="todo-single-item d-flex flex-row justify-content-between current">
-            <i class="mdi"></i>
-            <span>Create new prototype for the landing page</span>
-            <span class="badge badge-primary">Today</span>
-          </div>
-          <div class="todo-single-item d-flex flex-row justify-content-between ">
-            <i class="mdi"></i>
-            <span> Add new Google Analytics code to all main files </span>
-            <span class="badge badge-danger">Yesterday</span>
-          </div>
-
-          <div class="todo-single-item d-flex flex-row justify-content-between ">
-            <i class="mdi"></i>
-            <span>Update parallax scroll on team page</span>
-            <span class="badge badge-success">Dec 15, 2018</span>
-          </div>
-
-          <div class="todo-single-item d-flex flex-row justify-content-between ">
-            <i class="mdi"></i>
-            <span>Update parallax scroll on team page</span>
-            <span class="badge badge-success">Dec 15, 2018</span>
-          </div>
-          <div class="todo-single-item d-flex flex-row justify-content-between ">
-            <i class="mdi"></i>
-            <span>Create online customer list book</span>
-            <span class="badge badge-success">Dec 15, 2018</span>
-          </div>
-          <div class="todo-single-item d-flex flex-row justify-content-between ">
-            <i class="mdi"></i>
-            <span>Lorem ipsum dolor sit amet, consectetur.</span>
-            <span class="badge badge-success">Dec 15, 2018</span>
-          </div>
-
-          <div class="todo-single-item d-flex flex-row justify-content-between mb-1">
-            <i class="mdi"></i>
-            <span>Update parallax scroll on team page</span>
-            <span class="badge badge-success">Dec 15, 2018</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-                <!-- Table Product -->
-                <div class="row">
-                  <div class="col-12">
-                    <div class="card card-default">
-                      <div class="card-header">
-                        <h2>Products Inventory</h2>
-                        <div class="dropdown">
-                          <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false"> Yearly Chart
-                          </a>
-
-                          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="card-body">
-                        <table id="productsTable" class="table table-hover table-product" style="width:100%">
-                          <thead>
-                            <tr>
-                              <th></th>
-                              <th>Product Name</th>
-                              <th>ID</th>
-                              <th>Qty</th>
-                              <th>Variants</th>
-                              <th>Committed</th>
-                              <th>Daily Sale</th>
-                              <th>Sold</th>
-                              <th>In Stock</th>
-                              <th></th>
-                            </tr>
-                          </thead>
-                          <tbody>
-
-                            <tr>
-                              <td class="py-0">
-                                <img src="images/products/products-xs-01.jpg" alt="Product Image">
-                              </td>
-                              <td>Coach Swagger</td>
-                              <td>24541</td>
-                              <td>27</td>
-                              <td>1</td>
-                              <td>2</td>
-                              <td>
-                                <div id="tbl-chart-01"></div>
-                              </td>
-                              <td>4</td>
-                              <td>18</td>
-                              <td>
-                                <div class="dropdown">
-                                  <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                  </a>
-
-                                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>
-
-                            <tr>
-                              <td class="py-0">
-                                <img src="images/products/products-xs-02.jpg" alt="Product Image">
-                              </td>
-                              <td>Toddler Shoes, Gucci Watch</td>
-                              <td>24542</td>
-                              <td>18</td>
-                              <td>7</td>
-                              <td>5</td>
-                              <td>
-                                <div id="tbl-chart-02"></div>
-                              </td>
-                              <td>1</td>
-                              <td>14</td>
-                              <td>
-                                <div class="dropdown">
-                                  <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                  </a>
-
-                                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>
-
-                            <tr>
-                              <td class="py-0">
-                                <img src="images/products/products-xs-03.jpg" alt="Product Image">
-                              </td>
-                              <td>Hat Black Suits</td>
-                              <td>24543</td>
-                              <td>20</td>
-                              <td>3</td>
-                              <td>7</td>
-                              <td>
-                                <div id="tbl-chart-03"></div>
-                              </td>
-                              <td>6</td>
-                              <td>26</td>
-                              <td>
-                                <div class="dropdown">
-                                  <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                  </a>
-
-                                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>
-
-                            <tr>
-                              <td class="py-0">
-                                <img src="images/products/products-xs-04.jpg" alt="Product Image">
-                              </td>
-                              <td>Backpack Gents</td>
-                              <td>24544</td>
-                              <td>37</td>
-                              <td>8</td>
-                              <td>3</td>
-                              <td>
-                                <div id="tbl-chart-04"></div>
-                              </td>
-                              <td>6</td>
-                              <td>7</td>
-                              <td>
-                                <div class="dropdown">
-                                  <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                  </a>
-
-                                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>
-
-                            <tr>
-                              <td class="py-0">
-                                <img src="images/products/products-xs-05.jpg" alt="Product Image">
-                              </td>
-                              <td>Speed 500 Ignite</td>
-                              <td>24545</td>
-                              <td>8</td>
-                              <td>3</td>
-                              <td>4</td>
-                              <td>
-                                <div id="tbl-chart-05"></div>
-                              </td>
-                              <td>8</td>
-                              <td>42</td>
-                              <td>
-                                <div class="dropdown">
-                                  <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                  </a>
-
-                                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>
-
-                            <tr>
-                              <td class="py-0">
-                                <img src="images/products/products-xs-06.jpg" alt="Product Image">
-                              </td>
-                              <td>Olay</td>
-                              <td>24546</td>
-                              <td>19</td>
-                              <td>6</td>
-                              <td>6</td>
-                              <td>
-                                <div id="tbl-chart-06"></div>
-                              </td>
-                              <td>79</td>
-                              <td>12</td>
-                              <td>
-                                <div class="dropdown">
-                                  <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                  </a>
-
-                                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>
-
-                            <tr>
-                              <td class="py-0">
-                                <img src="images/products/products-xs-07.jpg" alt="Product Image">
-                              </td>
-                              <td>Ledger Nano X</td>
-                              <td>24547</td>
-                              <td>61</td>
-                              <td>46</td>
-                              <td>18</td>
-                              <td>
-                                <div id="tbl-chart-07"></div>
-                              </td>
-                              <td>76</td>
-                              <td>36</td>
-                              <td>
-                                <div class="dropdown">
-                                  <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                  </a>
-
-                                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>
-
-                            <tr>
-                              <td class="py-0">
-                                <img src="images/products/products-xs-08.jpg" alt="Product Image">
-                              </td>
-                              <td>Surface Laptop 2</td>
-                              <td>24548</td>
-                              <td>33</td>
-                              <td>56</td>
-                              <td>89</td>
-                              <td>
-                                <div id="tbl-chart-08"></div>
-                              </td>
-                              <td>38</td>
-                              <td>5</td>
-                              <td>
-                                <div class="dropdown">
-                                  <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                  </a>
-
-                                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>
-
-                            <tr>
-                              <td class="py-0">
-                                <img src="images/products/products-xs-09.jpg" alt="Product Image">
-                              </td>
-                              <td>TIGI Bed Head Superstar Queen</td>
-                              <td>24549</td>
-                              <td>3</td>
-                              <td>9</td>
-                              <td>15</td>
-                              <td>
-                                <div id="tbl-chart-09"></div>
-                              </td>
-                              <td>6</td>
-                              <td>46</td>
-                              <td>
-                                <div class="dropdown">
-                                  <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                  </a>
-
-                                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>
-
-                            <tr>
-                              <td class="py-0">
-                                <img src="images/products/products-xs-10.jpg" alt="Product Image">
-                              </td>
-                              <td>Wattbike Atom</td>
-                              <td>24550</td>
-                              <td>61</td>
-                              <td>56</td>
-                              <td>68</td>
-                              <td>
-                                <div id="tbl-chart-10"></div>
-                              </td>
-                              <td>3</td>
-                              <td>19</td>
-                              <td>
-                                <div class="dropdown">
-                                  <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                  </a>
-
-                                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>
-
-                            <tr>
-                              <td class="py-0">
-                                <img src="images/products/products-xs-11.jpg" alt="Product Image">
-                              </td>
-                              <td>Smart Watch</td>
-                              <td>24551</td>
-                              <td>19</td>
-                              <td>76</td>
-                              <td>38</td>
-                              <td>
-                                <div id="tbl-chart-11"></div>
-                              </td>
-                              <td>3</td>
-                              <td>17</td>
-                              <td>
-                                <div class="dropdown">
-                                  <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                  </a>
-
-                                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>
-
-                            <tr>
-                              <td class="py-0">
-                                <img src="images/products/products-xs-12.jpg" alt="Product Image">
-                              </td>
-                              <td>Magic Bullet Blender</td>
-                              <td>24552</td>
-                              <td>12</td>
-                              <td>30</td>
-                              <td>14</td>
-                              <td>
-                                <div id="tbl-chart-12"></div>
-                              </td>
-                              <td>26</td>
-                              <td>9</td>
-                              <td>
-                                <div class="dropdown">
-                                  <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                  </a>
-
-                                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>
-
-                            <tr>
-                              <td class="py-0">
-                                <img src="images/products/products-xs-13.jpg" alt="Product Image">
-                              </td>
-                              <td>Kanana rucksack</td>
-                              <td>24553</td>
-                              <td>14</td>
-                              <td>65</td>
-                              <td>39</td>
-                              <td>
-                                <div id="tbl-chart-13"></div>
-                              </td>
-                              <td>9</td>
-                              <td>55</td>
-                              <td>
-                                <div class="dropdown">
-                                  <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                  </a>
-
-                                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>
-
-                            <tr>
-                              <td class="py-0">
-                                <img src="images/products/products-xs-14.jpg" alt="Product Image">
-                              </td>
-                              <td>Copic Opaque White</td>
-                              <td>24554</td>
-                              <td>43</td>
-                              <td>29</td>
-                              <td>75</td>
-                              <td>
-                                <div id="tbl-chart-14"></div>
-                              </td>
-                              <td>7</td>
-                              <td>15</td>
-                              <td>
-                                <div class="dropdown">
-                                  <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                  </a>
-
-                                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>
-
-                            <tr>
-                              <td class="py-0">
-                                <img src="images/products/products-xs-15.jpg" alt="Product Image">
-                              </td>
-                              <td>Headphones</td>
-                              <td>24555</td>
-                              <td>17</td>
-                              <td>6</td>
-                              <td>7</td>
-                              <td>
-                                <div id="tbl-chart-15"></div>
-                              </td>
-                              <td>6</td>
-                              <td>98</td>
-                              <td>
-                                <div class="dropdown">
-                                  <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                  </a>
-
-                                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>
-
-
-
-                          </tbody>
-                        </table>
-
-                      </div>
-                    </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="city">City</label>
+                <input type="text" name="supplier-city" class="form-control" placeholder="City Name">
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="row">
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="State">State</label>
+                    <input type="text" name="supplier-state" class="form-control" placeholder="State">
                   </div>
                 </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="Zip">Zip</label>
+                    <input type="text" name="supplier-code-postal"  class="form-control" placeholder="Zip">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+      </div>
+    </div>
+
+    <!-- Form Pill -->
+    <div class="card card-default">
+      <div class="card-header">
+        <h2>Supplier Contact</h2>
+        <a class="btn mdi mdi-code-tags" data-toggle="collapse" href="#collapse-input-pill" role="button"
+          aria-expanded="false" aria-controls="collapse-input-pill"> </a>
+
+
+      </div>
+      <div class="card-body">
+        
+      <div class="form-group">
+            <label for="exampleFormControlInput3">Contact title</label>
+            <input type="text" class="form-control rounded-pill" name="contact-title" id="exampleFormControlInput3" placeholder="Enter the title">
+            <span class="mt-2 d-block">It may be the turn he plays in their company.</span>
+          </div>
+
+        <div class="form-group">
+            <label for="exampleFormControlInput3">Contact First Name</label>
+            <input type="text" class="form-control rounded-pill" name="contact-first-name" id="exampleFormControlInput3" placeholder="Enter contact first name">
+          </div>
+
+          <div class="form-group">
+            <label for="exampleFormControlInput3">Contact Last Name</label>
+            <input type="text" name="contact-last-name" class="form-control rounded-pill" id="exampleFormControlInput3" placeholder="Enter contact last name">
+          </div>
+
+          <div class="form-group">
+            <label for="exampleFormControlInput3">Supplier Email</label>
+            <input type="email" class="form-control rounded-pill" name="supplier-email" id="exampleFormControlInput3" placeholder="Enter email">
+          </div>
+
+          <div class="form-group">
+            <label for="exampleFormControlPassword12">Supplier Website</label>
+            <input type="text" name="supplier-website" class="form-control rounded-pill" placeholder="Supplier's official website">
+          </div>
+
+          <div class="form-group">
+            <label for="exampleFormControlPassword12">Supplier Phone</label>
+            <input type="tel" name="supplier-phone" class="form-control rounded-pill" placeholder="Supplier's phone">
+          </div>
+
+          <div class="form-group">
+            <label for="exampleFormControlPassword12">Supplier Fax</label>
+            <input type="tel" name="supplier-fax" class="form-control rounded-pill" placeholder="Supplier's official fax">
+          </div>
+
+          <div class="form-group">
+            <label for="exampleFormControlPassword12">Payment account</label>
+            <input type="text" name="payment-method" class="form-control rounded-pill" placeholder="Supplier's payment method">
+          </div>
+
+          <div class="form-group">
+            <label for="formFile" class="form-label">Company logo</label>
+            <input class="form-control" name="company-logo" type="file" id="formFile">
+          </div>
+
+          <br>
+          
+          <div class="form-footer mt-4">
+            <button type="submit" name="submit-supplier-form" class="btn btn-primary btn-pill">Submit</button>
+            <button type="reset" class="btn btn-light btn-pill">Cancel</button>
+          </div>
+
+      </div>
+    </div>
+
+
+
+  </div>
+    </form>
+</div>
+
 </div>
           
         </div>
-        
-          <!-- Footer -->
-          <footer class="footer mt-auto">
-            <div class="copyright bg-white">
-              <p>
-                &copy; <span id="copy-year"></span> Copyright Mono Dashboard Bootstrap Template by <a class="text-primary" href="http://www.iamabdus.com/" target="_blank" >Abdus</a>.
-              </p>
-            </div>
-            <script>
-                var d = new Date();
-                var year = d.getFullYear();
-                document.getElementById("copy-year").innerHTML = year;
-            </script>
-          </footer>
 
       </div>
     </div>
     
-                    <!-- Card Offcanvas -->
-                    <div class="card card-offcanvas" id="contact-off" >
-                      <div class="card-header">
-                        <h2>Contacts</h2>
-                        <a href="#" class="btn btn-primary btn-pill px-4">Add New</a>
-                      </div>
-                      <div class="card-body">
+    <!-- Card Offcanvas -->
+    <div class="card card-offcanvas" id="contact-off" >
+        <div class="card-header">
+        <h2>Contacts</h2>
+        <a href="#" class="btn btn-primary btn-pill px-4">Add New</a>
+        </div>
+        <div class="card-body">
 
-                        <div class="mb-4">
-                          <input type="text" class="form-control form-control-lg form-control-secondary rounded-0" placeholder="Search contacts...">
-                        </div>
+        <div class="mb-4">
+            <input type="text" class="form-control form-control-lg form-control-secondary rounded-0" placeholder="Search contacts...">
+        </div>
 
-                        <div class="media media-sm">
-                          <div class="media-sm-wrapper">
-                            <a href="user-profile.html">
-                              <img src="images/user/user-sm-01.jpg" alt="User Image">
-                              <span class="active bg-primary"></span>
-                            </a>
-                          </div>
-                          <div class="media-body">
-                            <a href="user-profile.html">
-                              <span class="title">Selena Wagner</span>
-                              <span class="discribe">Designer</span>
-                            </a>
-                          </div>
-                        </div>
+        <div class="media media-sm">
+            <div class="media-sm-wrapper">
+            <a href="user-profile.html">
+                <img src="images/user/user-sm-01.jpg" alt="User Image">
+                <span class="active bg-primary"></span>
+            </a>
+            </div>
+            <div class="media-body">
+            <a href="user-profile.html">
+                <span class="title">Selena Wagner</span>
+                <span class="discribe">Designer</span>
+            </a>
+            </div>
+        </div>
 
-                        <div class="media media-sm">
-                          <div class="media-sm-wrapper">
-                            <a href="user-profile.html">
-                              <img src="images/user/user-sm-02.jpg" alt="User Image">
-                              <span class="active bg-primary"></span>
-                            </a>
-                          </div>
-                          <div class="media-body">
-                            <a href="user-profile.html">
-                              <span class="title">Walter Reuter</span>
-                              <span>Developer</span>
-                            </a>
-                          </div>
-                        </div>
+        <div class="media media-sm">
+            <div class="media-sm-wrapper">
+            <a href="user-profile.html">
+                <img src="images/user/user-sm-02.jpg" alt="User Image">
+                <span class="active bg-primary"></span>
+            </a>
+            </div>
+            <div class="media-body">
+            <a href="user-profile.html">
+                <span class="title">Walter Reuter</span>
+                <span>Developer</span>
+            </a>
+            </div>
+        </div>
 
-                        <div class="media media-sm">
-                          <div class="media-sm-wrapper">
-                            <a href="user-profile.html">
-                              <img src="images/user/user-sm-03.jpg" alt="User Image">
-                            </a>
-                          </div>
-                          <div class="media-body">
-                            <a href="user-profile.html">
-                              <span class="title">Larissa Gebhardt</span>
-                              <span>Cyber Punk</span>
-                            </a>
-                          </div>
-                        </div>
+        <div class="media media-sm">
+            <div class="media-sm-wrapper">
+            <a href="user-profile.html">
+                <img src="images/user/user-sm-03.jpg" alt="User Image">
+            </a>
+            </div>
+            <div class="media-body">
+            <a href="user-profile.html">
+                <span class="title">Larissa Gebhardt</span>
+                <span>Cyber Punk</span>
+            </a>
+            </div>
+        </div>
 
-                        <div class="media media-sm">
-                          <div class="media-sm-wrapper">
-                            <a href="user-profile.html">
-                              <img src="images/user/user-sm-04.jpg" alt="User Image">
-                            </a>
+        <div class="media media-sm">
+            <div class="media-sm-wrapper">
+            <a href="user-profile.html">
+                <img src="images/user/user-sm-04.jpg" alt="User Image">
+            </a>
 
-                          </div>
-                          <div class="media-body">
-                            <a href="user-profile.html">
-                              <span class="title">Albrecht Straub</span>
-                              <span>Photographer</span>
-                            </a>
-                          </div>
-                        </div>
+            </div>
+            <div class="media-body">
+            <a href="user-profile.html">
+                <span class="title">Albrecht Straub</span>
+                <span>Photographer</span>
+            </a>
+            </div>
+        </div>
 
-                        <div class="media media-sm">
-                          <div class="media-sm-wrapper">
-                            <a href="user-profile.html">
-                              <img src="images/user/user-sm-05.jpg" alt="User Image">
-                              <span class="active bg-danger"></span>
-                            </a>
-                          </div>
-                          <div class="media-body">
-                            <a href="user-profile.html">
-                              <span class="title">Leopold Ebert</span>
-                              <span>Fashion Designer</span>
-                            </a>
-                          </div>
-                        </div>
+        <div class="media media-sm">
+            <div class="media-sm-wrapper">
+            <a href="user-profile.html">
+                <img src="images/user/user-sm-05.jpg" alt="User Image">
+                <span class="active bg-danger"></span>
+            </a>
+            </div>
+            <div class="media-body">
+            <a href="user-profile.html">
+                <span class="title">Leopold Ebert</span>
+                <span>Fashion Designer</span>
+            </a>
+            </div>
+        </div>
 
-                        <div class="media media-sm">
-                          <div class="media-sm-wrapper">
-                            <a href="user-profile.html">
-                              <img src="images/user/user-sm-06.jpg" alt="User Image">
-                              <span class="active bg-primary"></span>
-                            </a>
-                          </div>
-                          <div class="media-body">
-                            <a href="user-profile.html">
-                              <span class="title">Selena Wagner</span>
-                              <span>Photographer</span>
-                            </a>
-                          </div>
-                        </div>
+        <div class="media media-sm">
+            <div class="media-sm-wrapper">
+            <a href="user-profile.html">
+                <img src="images/user/user-sm-06.jpg" alt="User Image">
+                <span class="active bg-primary"></span>
+            </a>
+            </div>
+            <div class="media-body">
+            <a href="user-profile.html">
+                <span class="title">Selena Wagner</span>
+                <span>Photographer</span>
+            </a>
+            </div>
+        </div>
 
-                      </div>
-                    </div>
+        </div>
+    </div>
 
 
+
+
+    <script src="plugins/jquery/jquery.min.js"></script>
+    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="plugins/simplebar/simplebar.min.js"></script>
+    <script src="https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>
 
     
-                    <script src="plugins/jquery/jquery.min.js"></script>
-                    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-                    <script src="plugins/simplebar/simplebar.min.js"></script>
-                    <script src="https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>
+    
+    <script src="plugins/prism/prism.js"></script>
+    
+    
+    <script src="js/mono.js"></script>
+    <script src="js/chart.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/custom.js"></script>
 
-                    
-                    
-                    <script src="plugins/DataTables/DataTables-1.10.18/js/jquery.dataTables.min.js"></script>
-                    
-                    
-                    
-                    <script src="plugins/apexcharts/apexcharts.js"></script>
-                    
-                    
-                    <script src="js/mono.js"></script>
-                    <script src="js/chart.js"></script>
-                    <script src="js/map.js"></script>
-                    <script src="js/custom.js"></script>
-
-                    
+    
 
 
-                    <!--  -->
+    <!--  -->
 
 
   </body>
