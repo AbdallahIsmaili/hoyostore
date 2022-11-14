@@ -1,97 +1,53 @@
 <?php 
-
+error_reporting(E_ALL);
 
 include "../../classes/databaseClass.php"; 
-include "../../classes/supplierClass.php"; 
+include "../../classes/categoryClass.php"; 
 
 session_start();
-$addSupplier = new Suppliers();
+$addCategory = new Category();
 
 $error = "";
 $validationError = "";
 $validation = "";
+$nothing = "";
 
-if(isset($_POST['submit-supplier-form'])){
+if (isset($_POST['submit-form']) && $_POST['submit-form'] != '' && $_POST['submit-form'] != null) {}
 
-    $companyName = trim($_POST['company-name']);
-    $contactFName = trim($_POST['contact-first-name']);
-    $contactLName = trim($_POST['contact-last-name']);
-    $addressOne = trim($_POST['supplier-address-one']);
-    $addressTwo = trim($_POST['supplier-address-two']);
-    $country = trim($_POST['supplier-country']);
-    $city = trim($_POST['supplier-city']);
-    $state = trim($_POST['supplier-state']);
-    $codePostal = trim($_POST['supplier-code-postal']);
-    $supplierEmail = trim($_POST['supplier-email']);
-    $contactTitle = trim($_POST['contact-title']);
-    $website = trim($_POST['supplier-website']);
-    $date = date("Y-m-d H:i:s");
-    $phoneNumber = trim($_POST['supplier-phone']);
-    $faxNumber = trim($_POST['supplier-fax']);
-    $paymentMethod = trim($_POST['payment-method']);
-    $discountAvailable = 0;
-    $logo = trim($_POST['company-logo']);
+if(isset($_POST['submit-category-form'])){
+
+    $categoryName = trim($_POST['company-name']);
+    $categoryDesc = trim($_POST['category-desc']);
+    $createdAt = date("Y-m-d H:i:s");
+    $isActive = 0;
+    $icon = trim($_POST['category-icon']);
 
 
-    if(empty($supplierEmail) && empty($companyName) && empty($contactFName) && empty($contactLName) && empty($addressOne) && empty($addressTwo) && empty($country) && empty($city) && empty($state) && empty($codePostal) && empty($supplierEmail) && empty($contactTitle) && empty($website) && empty($date) && empty($phoneNumber) && empty($faxNumber) && empty($paymentMethod) && empty($logo)){
+    if(empty($categoryName) && empty($categoryDesc) && empty($icon)){
         $error .= "Please make sure to fill in all the boxes <br>";
 
-    }else if(empty($supplierEmail) || !preg_match("/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/i", $supplierEmail)){
-        $error .= "Please enter a valid email address <br>";
+    }else if(empty($categoryName) || !preg_match("/^[a-zA-Z_ ]*$/", $categoryName)){
+        $error .= "Please enter a valid category name <br>";
 
-    }else if(empty($companyName) || !preg_match("/^[a-zA-Z_ ]*$/", $companyName)){
-        $error .= "Please enter a valid company name <br>";
+    }else if(empty($categoryDesc)){
+        $error .= "Please enter category description name <br>";
 
-    }else if(empty($contactFName) || !preg_match("/^[a-zA-Z_ ]*$/", $contactFName)){
-        $error .= "Please enter a valid name <br>";
+    }else if(empty($icon)){
+        $error .= "Please enter the company icon <br>";
 
-    }else if(empty($contactLName) || !preg_match("/^[a-zA-Z_ ]*$/", $contactLName)){
-        $error .= "Please enter a valid name <br>";
-
-    }else if(empty($addressOne) || empty($addressTwo)){
-        $error .= "Please enter the address #1, #2 <br>";
-
-    }else if(empty($country)){
-        $error .= "Please enter the country <br>";
-
-    }else if(empty($state)){
-        $error .= "Please enter the state <br>";
-
-    }else if(empty($city)){
-        $error .= "Please enter the city <br>";
-
-    }else if(empty($codePostal)){
-        $error .= "Please enter the code postal <br>";
-
-    }else if(empty($phoneNumber)){
-        $error .= "Please enter the phone number <br>";
-
-    }else if(empty($faxNumber)){
-        $error .= "Please enter the fax number <br>";
-
-    }else if(empty($contactTitle)){
-        $error .= "Please enter the contact title <br>";
-
-    }else if(empty($website)){
-        $error .= "Please enter the company website <br>";
-
-    }else if(empty($paymentMethod) || !preg_match("/^[0-9]{16}$/", $paymentMethod)){
-        $error .= "Please enter a valid payment credit card <br>";
-
-    }else if(empty($logo)){
-        $error .= "Please enter the company logo <br>";
-
+    }else{
+      $error .= "";
     }
 
     if(empty($error)){
-        $result = $addSupplier->registerSupplier($companyName, $contactTitle, $contactFName, $contactLName, $addressOne, $addressTwo, $country, $state, $city, $codePostal, $supplierEmail, $phoneNumber, $faxNumber, $website, $paymentMethod, $discountAvailable, $date, $logo);
+        $result = $addCategory->registerCategory($categoryName, $categoryDesc, $icon, $createdAt, $isActive);
 
         if($result == 1){
-          $validationError .= "We already have a companionship with that company. <br>";
+          $validationError .= "We already have this category. <br>";
+        }else{
+            $validation .= "The category $categoryName added successfully";
         }
         
-    }else{
-      $validation .= "The supplier $companyName added successfully";
     }
     
 }
@@ -109,7 +65,7 @@ if(isset($_SESSION['user_url'])){
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <title>Admin - add supplier</title>
+  <title>Admin - add category</title>
 
   <!-- GOOGLE FONTS -->
   <link href="https://fonts.googleapis.com/css?family=Karla:400,700|Roboto" rel="stylesheet">
@@ -1297,7 +1253,7 @@ if(isset($_SESSION['user_url'])){
                 <span class="sr-only">Toggle navigation</span>
               </button>
 
-              <span class="page-title">Add Supplier</span>
+              <span class="page-title">Add Category</span>
 
               <div class="navbar-right ">
 
@@ -1647,10 +1603,11 @@ if(isset($_SESSION['user_url'])){
                 <i class='mdi mdi-alert-decagram-outline'></i> $validationError
               </div>";
             }
+
             if($validation != ''){
-              echo "<div class='alert alert-success' role='alert'>$validation
-            </div>";
-          }
+                echo "<div class='alert alert-success' role='alert'>$validation
+              </div>";
+            }
           ?>
             
 
@@ -1663,12 +1620,12 @@ if(isset($_SESSION['user_url'])){
 
           <div class="row">
             <div class="col-xl-12">
-    <form action="" method="POST">
-    <!-- Add Supplyer -->
+    <form action="add-category.php" method="POST">
+    <!-- Add Category -->
 
     <div class="card card-default">
       <div class="card-header">
-        <h2>about Supplier</h2>
+        <h2>about the category</h2>
         <a class="btn mdi mdi-code-tags" data-toggle="collapse" href="#collapse-basic-input" role="button"
           aria-expanded="false" aria-controls="collapse-basic-input"> </a>
 
@@ -1677,134 +1634,28 @@ if(isset($_SESSION['user_url'])){
       <div class="card-body">
 
           <div class="form-group">
-            <label for="exampleFormControlInput2">Company name</label>
-            <input type="text" name="company-name" class="form-control" id="exampleFormControlInput2" placeholder="Enter Company name">
+            <label for="exampleFormControlInput2">Category name</label>
+            <input type="text" name="company-name" class="form-control" id="exampleFormControlInput2" placeholder="Enter category name">
             <span class="mt-2 d-block">Make sure to enter it exactly.</span>
           </div>
-          <div class="form-group">
-            <label for="exampleFormControlPassword">Address #1</label>
-            <input type="address" name="supplier-address-one" class="form-control" id="exampleFormControlPassword" placeholder="First address">
+
+            <div class="form-group">
+                <label for="exampleFormControlTextarea1">Category Description</label>
+                <textarea class="form-control" id="exampleFormControlTextarea1" name="category-desc" rows="3"></textarea>
+            </div>
+
+            <div class="form-group">
+            <label for="formFile" class="form-label">Category logo</label>
+            <input class="form-control" name="category-icon" type="file" id="formFile">
           </div>
-          <div class="form-group">
-            <label for="exampleFormControlPassword">Address #2</label>
-            <input type="address" name="supplier-address-two" class="form-control" id="exampleFormControlPassword" placeholder="First address">
-          </div>
+
+            <div class="form-footer mt-4">
+                <button type="submit" name="submit-category-form" class="btn btn-primary btn-pill">Submit</button>
+                <button type="reset" class="btn btn-light btn-pill">Cancel</button>
+            </div>
 
       </div>
     </div>
-
-    <!-- Custom Styles -->
-    <div class="card card-default">
-      <div class="card-header">
-        <h2>Supplier information</h2>
-        <a class="btn mdi mdi-code-tags" data-toggle="collapse" href="#collapse-custom-input" role="button"
-          aria-expanded="false" aria-controls="collapse-custom-input"> </a>
-
-
-      </div>
-      <div class="card-body">
-        
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="form-group">
-                <label for="fcountry">Country</label>
-                <input type="text" name="supplier-country" class="form-control" placeholder="Country">
-              </div>
-            </div>
-            <div class="col-sm-6">
-              <div class="form-group">
-                <label for="city">City</label>
-                <input type="text" name="supplier-city" class="form-control" placeholder="City Name">
-              </div>
-            </div>
-            <div class="col-sm-6">
-              <div class="row">
-                <div class="col-6">
-                  <div class="form-group">
-                    <label for="State">State</label>
-                    <input type="text" name="supplier-state" class="form-control" placeholder="State">
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="form-group">
-                    <label for="Zip">Zip</label>
-                    <input type="text" name="supplier-code-postal"  class="form-control" placeholder="Zip">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-      </div>
-    </div>
-
-    <!-- Form Pill -->
-    <div class="card card-default">
-      <div class="card-header">
-        <h2>Supplier Contact</h2>
-        <a class="btn mdi mdi-code-tags" data-toggle="collapse" href="#collapse-input-pill" role="button"
-          aria-expanded="false" aria-controls="collapse-input-pill"> </a>
-
-
-      </div>
-      <div class="card-body">
-        
-      <div class="form-group">
-            <label for="exampleFormControlInput3">Contact title</label>
-            <input type="text" class="form-control rounded-pill" name="contact-title" id="exampleFormControlInput3" placeholder="Enter the title">
-            <span class="mt-2 d-block">It may be the turn he plays in their company.</span>
-          </div>
-
-        <div class="form-group">
-            <label for="exampleFormControlInput3">Contact First Name</label>
-            <input type="text" class="form-control rounded-pill" name="contact-first-name" id="exampleFormControlInput3" placeholder="Enter contact first name">
-          </div>
-
-          <div class="form-group">
-            <label for="exampleFormControlInput3">Contact Last Name</label>
-            <input type="text" name="contact-last-name" class="form-control rounded-pill" id="exampleFormControlInput3" placeholder="Enter contact last name">
-          </div>
-
-          <div class="form-group">
-            <label for="exampleFormControlInput3">Supplier Email</label>
-            <input type="email" class="form-control rounded-pill" name="supplier-email" id="exampleFormControlInput3" placeholder="Enter email">
-          </div>
-
-          <div class="form-group">
-            <label for="exampleFormControlPassword12">Supplier Website</label>
-            <input type="text" name="supplier-website" class="form-control rounded-pill" placeholder="Supplier's official website">
-          </div>
-
-          <div class="form-group">
-            <label for="exampleFormControlPassword12">Supplier Phone</label>
-            <input type="tel" name="supplier-phone" class="form-control rounded-pill" placeholder="Supplier's phone">
-          </div>
-
-          <div class="form-group">
-            <label for="exampleFormControlPassword12">Supplier Fax</label>
-            <input type="tel" name="supplier-fax" class="form-control rounded-pill" placeholder="Supplier's official fax">
-          </div>
-
-          <div class="form-group">
-            <label for="exampleFormControlPassword12">Payment account</label>
-            <input type="text" name="payment-method" class="form-control rounded-pill" placeholder="Supplier's payment method">
-          </div>
-
-          <div class="form-group">
-            <label for="formFile" class="form-label">Company logo</label>
-            <input class="form-control" name="company-logo" type="file" id="formFile">
-          </div>
-
-          <br>
-          
-          <div class="form-footer mt-4">
-            <button type="submit" name="submit-supplier-form" class="btn btn-primary btn-pill">Submit</button>
-            <button type="reset" class="btn btn-light btn-pill">Cancel</button>
-          </div>
-
-      </div>
-    </div>
-
 
 
   </form>
@@ -1924,7 +1775,7 @@ if(isset($_SESSION['user_url'])){
 
 
 
-
+    <script type="text/javascript" src='../theme/js/jquery-3.6.1.js'></script>
     <script src="plugins/jquery/jquery.min.js"></script>
     <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="plugins/simplebar/simplebar.min.js"></script>
@@ -1940,7 +1791,20 @@ if(isset($_SESSION['user_url'])){
     <script src="js/map.js"></script>
     <script src="js/custom.js"></script>
 
-    
+    <!-- <script>
+      function formSubmit(){
+        $.ajax({
+          type:"POST",
+          url:'addCategory.php',
+          data: $('#formBox').serialize(),
+          success:function(response){
+            $('#success').html(response);
+          }
+        });
+        var form = document.getElementById("formBox").reset();
+        return false;
+      }
+    </script> -->
 
 
     <!--  -->

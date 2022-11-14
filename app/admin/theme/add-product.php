@@ -1,99 +1,77 @@
 <?php 
 
-
 include "../../classes/databaseClass.php"; 
-include "../../classes/supplierClass.php"; 
+include('../../classes/categoryClass.php');
+include "../../classes/productClass.php"; 
+include "../../classes/supplierClass.php";
 
 session_start();
-$addSupplier = new Suppliers();
+$addProduct = new Products();
 
 $error = "";
 $validationError = "";
 $validation = "";
 
-if(isset($_POST['submit-supplier-form'])){
+if(isset($_POST['submit-product-form'])){
 
-    $companyName = trim($_POST['company-name']);
-    $contactFName = trim($_POST['contact-first-name']);
-    $contactLName = trim($_POST['contact-last-name']);
-    $addressOne = trim($_POST['supplier-address-one']);
-    $addressTwo = trim($_POST['supplier-address-two']);
-    $country = trim($_POST['supplier-country']);
-    $city = trim($_POST['supplier-city']);
-    $state = trim($_POST['supplier-state']);
-    $codePostal = trim($_POST['supplier-code-postal']);
-    $supplierEmail = trim($_POST['supplier-email']);
-    $contactTitle = trim($_POST['contact-title']);
-    $website = trim($_POST['supplier-website']);
+    $productName = trim($_POST['product-name']);
+    $productDesc = trim($_POST['product-desc']);
+    $supplierId = trim($_POST['supplier-id']);
+    $categoryId = trim($_POST['category-id']);
+    $unitPrice = trim($_POST['unit-price']);
+    $size = trim($_POST['size']);
+    $productColor = trim($_POST['product-color']);
+    $sizesAvailable = trim($_POST['sizes-available']);
+    $colorsAvailable = trim($_POST['colors-available']);
+    $unitWeight = trim($_POST['unit-weight']);
+    $unitOnStock = trim($_POST['unit-on-stock']);
+    $unitOnOrder = 0;
+    $productAvailable = 1;
     $date = date("Y-m-d H:i:s");
-    $phoneNumber = trim($_POST['supplier-phone']);
-    $faxNumber = trim($_POST['supplier-fax']);
-    $paymentMethod = trim($_POST['payment-method']);
+    $ranking = 0;
+    $discount = 0;
     $discountAvailable = 0;
-    $logo = trim($_POST['company-logo']);
+    $productPicture = trim($_POST['product-picture']);
 
 
-    if(empty($supplierEmail) && empty($companyName) && empty($contactFName) && empty($contactLName) && empty($addressOne) && empty($addressTwo) && empty($country) && empty($city) && empty($state) && empty($codePostal) && empty($supplierEmail) && empty($contactTitle) && empty($website) && empty($date) && empty($phoneNumber) && empty($faxNumber) && empty($paymentMethod) && empty($logo)){
+    if(empty($productName) && empty($productDesc) && empty($supplierId) && empty($categoryId) && empty($unitPrice) && empty($size) && empty($productColor) && empty($sizesAvailable) && empty($colorsAvailable) && empty($unitWeight) && empty($unitOnStock) && empty($unitOnOrder) && empty($productAvailable) && empty($date) && empty($ranking) && empty($discount) && empty($discountAvailable) && empty($productPicture)){
         $error .= "Please make sure to fill in all the boxes <br>";
 
-    }else if(empty($supplierEmail) || !preg_match("/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/i", $supplierEmail)){
-        $error .= "Please enter a valid email address <br>";
+    }else if(empty($productName)){
+        $error .= "Please enter a valid product name <br>";
 
-    }else if(empty($companyName) || !preg_match("/^[a-zA-Z_ ]*$/", $companyName)){
-        $error .= "Please enter a valid company name <br>";
+    }else if(empty($productDesc)){
+        $error .= "Please enter a valid description <br>";
 
-    }else if(empty($contactFName) || !preg_match("/^[a-zA-Z_ ]*$/", $contactFName)){
-        $error .= "Please enter a valid name <br>";
+    }else if(empty($supplierId)){
+        $error .= "Please enter the supplier <br>";
 
-    }else if(empty($contactLName) || !preg_match("/^[a-zA-Z_ ]*$/", $contactLName)){
-        $error .= "Please enter a valid name <br>";
+    }else if(empty($categoryId)){
+      $error .= "Please enter the category <br>";
 
-    }else if(empty($addressOne) || empty($addressTwo)){
-        $error .= "Please enter the address #1, #2 <br>";
+    }else if(empty($unitPrice)){
+        $error .= "Please enter the price <br>";
 
-    }else if(empty($country)){
-        $error .= "Please enter the country <br>";
+    }else if(empty($unitWeight)){
+        $error .= "Please enter the weight <br>";
 
-    }else if(empty($state)){
-        $error .= "Please enter the state <br>";
+    }else if(empty($unitOnStock)){
+        $error .= "Please enter the quantity <br>";
 
-    }else if(empty($city)){
-        $error .= "Please enter the city <br>";
-
-    }else if(empty($codePostal)){
-        $error .= "Please enter the code postal <br>";
-
-    }else if(empty($phoneNumber)){
-        $error .= "Please enter the phone number <br>";
-
-    }else if(empty($faxNumber)){
-        $error .= "Please enter the fax number <br>";
-
-    }else if(empty($contactTitle)){
-        $error .= "Please enter the contact title <br>";
-
-    }else if(empty($website)){
-        $error .= "Please enter the company website <br>";
-
-    }else if(empty($paymentMethod) || !preg_match("/^[0-9]{16}$/", $paymentMethod)){
-        $error .= "Please enter a valid payment credit card <br>";
-
-    }else if(empty($logo)){
-        $error .= "Please enter the company logo <br>";
+    }else if(empty($productPicture)){
+        $error .= "Please enter the product picture <br>";
 
     }
 
     if(empty($error)){
-        $result = $addSupplier->registerSupplier($companyName, $contactTitle, $contactFName, $contactLName, $addressOne, $addressTwo, $country, $state, $city, $codePostal, $supplierEmail, $phoneNumber, $faxNumber, $website, $paymentMethod, $discountAvailable, $date, $logo);
+        $result = $addProduct->registerProduct($productName, $productDesc, $supplierId, $categoryId, $unitPrice, $size, $productColor, $sizesAvailable, $colorsAvailable, $unitWeight, $unitOnStock, $unitOnOrder, $productAvailable, $date, $ranking, $discount, $discountAvailable, $productPicture);
 
         if($result == 1){
-          $validationError .= "We already have a companionship with that company. <br>";
+          $validation .= "The product <b>$productName</b> added successfully";
         }
         
-    }else{
-      $validation .= "The supplier $companyName added successfully";
     }
-    
+
 }
 
 if(isset($_SESSION['user_url'])){
@@ -109,7 +87,7 @@ if(isset($_SESSION['user_url'])){
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <title>Admin - add supplier</title>
+  <title>Admin - add product</title>
 
   <!-- GOOGLE FONTS -->
   <link href="https://fonts.googleapis.com/css?family=Karla:400,700|Roboto" rel="stylesheet">
@@ -1297,7 +1275,7 @@ if(isset($_SESSION['user_url'])){
                 <span class="sr-only">Toggle navigation</span>
               </button>
 
-              <span class="page-title">Add Supplier</span>
+              <span class="page-title">Add Product</span>
 
               <div class="navbar-right ">
 
@@ -1664,11 +1642,11 @@ if(isset($_SESSION['user_url'])){
           <div class="row">
             <div class="col-xl-12">
     <form action="" method="POST">
-    <!-- Add Supplyer -->
+    <!-- Add Product -->
 
     <div class="card card-default">
       <div class="card-header">
-        <h2>about Supplier</h2>
+        <h2>about Product</h2>
         <a class="btn mdi mdi-code-tags" data-toggle="collapse" href="#collapse-basic-input" role="button"
           aria-expanded="false" aria-controls="collapse-basic-input"> </a>
 
@@ -1677,17 +1655,55 @@ if(isset($_SESSION['user_url'])){
       <div class="card-body">
 
           <div class="form-group">
-            <label for="exampleFormControlInput2">Company name</label>
-            <input type="text" name="company-name" class="form-control" id="exampleFormControlInput2" placeholder="Enter Company name">
+            <label for="exampleFormControlInput2">Product name</label>
+            <input type="text" name="product-name" class="form-control" id="exampleFormControlInput2" placeholder="Enter product name">
             <span class="mt-2 d-block">Make sure to enter it exactly.</span>
           </div>
+
           <div class="form-group">
-            <label for="exampleFormControlPassword">Address #1</label>
-            <input type="address" name="supplier-address-one" class="form-control" id="exampleFormControlPassword" placeholder="First address">
+            <label for="exampleFormControlTextarea1">Product Description</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" name="product-desc" rows="3"></textarea>
           </div>
+
           <div class="form-group">
-            <label for="exampleFormControlPassword">Address #2</label>
-            <input type="address" name="supplier-address-two" class="form-control" id="exampleFormControlPassword" placeholder="First address">
+            <label for="exampleFormControlSelect14">The Supplier</label>
+            <select name="supplier-id" class="form-control rounded-0" id="exampleFormControlSelect14">
+
+            <?php
+
+              $suppliers = new Suppliers();
+
+              $result = $suppliers->getSuppliers();
+
+              foreach ($result as $key) {
+                echo "<option value=".$key->supplier_id.">".$key->company_name."</option>";
+
+              }
+            ?>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="exampleFormControlSelect14">The Supplier</label>
+            <select name="category-id" class="form-control rounded-0" id="exampleFormControlSelect14">
+
+            <?php
+
+              $categories = new Category();
+
+              $result = $categories->getCategories();
+
+              foreach ($result as $key) {
+                echo "<option value=".$key->category_id.">".$key->category_name."</option>";
+
+              }
+            ?>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="exampleFormControlPassword">Unit Price</label>
+            <input type="number" name="unit-price" class="form-control" id="exampleFormControlPassword" placeholder="The price for one unit">
           </div>
 
       </div>
@@ -1696,7 +1712,7 @@ if(isset($_SESSION['user_url'])){
     <!-- Custom Styles -->
     <div class="card card-default">
       <div class="card-header">
-        <h2>Supplier information</h2>
+        <h2>Product information</h2>
         <a class="btn mdi mdi-code-tags" data-toggle="collapse" href="#collapse-custom-input" role="button"
           aria-expanded="false" aria-controls="collapse-custom-input"> </a>
 
@@ -1707,28 +1723,34 @@ if(isset($_SESSION['user_url'])){
           <div class="row">
             <div class="col-sm-6">
               <div class="form-group">
-                <label for="fcountry">Country</label>
-                <input type="text" name="supplier-country" class="form-control" placeholder="Country">
+                <label for="fcountry">Size</label>
+                <input type="text" name="size" class="form-control" placeholder="Size">
               </div>
             </div>
+
             <div class="col-sm-6">
               <div class="form-group">
-                <label for="city">City</label>
-                <input type="text" name="supplier-city" class="form-control" placeholder="City Name">
+                <label for="city">Color</label>
+                <input type="color" name="product-color" class="form-control" placeholder="Color">
               </div>
             </div>
+
             <div class="col-sm-6">
               <div class="row">
                 <div class="col-6">
                   <div class="form-group">
-                    <label for="State">State</label>
-                    <input type="text" name="supplier-state" class="form-control" placeholder="State">
+                    <label for="State">Sizes available</label>
+                    <input type="text" name="sizes-available" class="form-control" placeholder="Sizes">
+                    <span class="mt-2 d-block">For clothes only (XXL, XL, L, M, S, XS).</span>
+
                   </div>
                 </div>
+
                 <div class="col-6">
                   <div class="form-group">
-                    <label for="Zip">Zip</label>
-                    <input type="text" name="supplier-code-postal"  class="form-control" placeholder="Zip">
+                    <label for="Zip">Colors available</label>
+                    <input type="text" name="colors-available"  class="form-control" placeholder="Colors">
+                    <span class="mt-2 d-block">Available clothes (no more than ten colors).</span>
                   </div>
                 </div>
               </div>
@@ -1741,7 +1763,7 @@ if(isset($_SESSION['user_url'])){
     <!-- Form Pill -->
     <div class="card card-default">
       <div class="card-header">
-        <h2>Supplier Contact</h2>
+        <h2>Products details</h2>
         <a class="btn mdi mdi-code-tags" data-toggle="collapse" href="#collapse-input-pill" role="button"
           aria-expanded="false" aria-controls="collapse-input-pill"> </a>
 
@@ -1750,55 +1772,25 @@ if(isset($_SESSION['user_url'])){
       <div class="card-body">
         
       <div class="form-group">
-            <label for="exampleFormControlInput3">Contact title</label>
-            <input type="text" class="form-control rounded-pill" name="contact-title" id="exampleFormControlInput3" placeholder="Enter the title">
-            <span class="mt-2 d-block">It may be the turn he plays in their company.</span>
+            <label for="exampleFormControlInput3">Unit weight</label>
+            <input type="number" class="form-control rounded-pill" name="unit-weight" id="exampleFormControlInput3" placeholder="Enter the weight">
+            <span class="mt-2 d-block">By Kg only.</span>
           </div>
 
         <div class="form-group">
-            <label for="exampleFormControlInput3">Contact First Name</label>
-            <input type="text" class="form-control rounded-pill" name="contact-first-name" id="exampleFormControlInput3" placeholder="Enter contact first name">
+            <label for="exampleFormControlInput3">Unit on stock</label>
+            <input type="number" class="form-control rounded-pill" name="unit-on-stock" id="exampleFormControlInput3" placeholder="Enter it exactly">
           </div>
 
           <div class="form-group">
-            <label for="exampleFormControlInput3">Contact Last Name</label>
-            <input type="text" name="contact-last-name" class="form-control rounded-pill" id="exampleFormControlInput3" placeholder="Enter contact last name">
-          </div>
-
-          <div class="form-group">
-            <label for="exampleFormControlInput3">Supplier Email</label>
-            <input type="email" class="form-control rounded-pill" name="supplier-email" id="exampleFormControlInput3" placeholder="Enter email">
-          </div>
-
-          <div class="form-group">
-            <label for="exampleFormControlPassword12">Supplier Website</label>
-            <input type="text" name="supplier-website" class="form-control rounded-pill" placeholder="Supplier's official website">
-          </div>
-
-          <div class="form-group">
-            <label for="exampleFormControlPassword12">Supplier Phone</label>
-            <input type="tel" name="supplier-phone" class="form-control rounded-pill" placeholder="Supplier's phone">
-          </div>
-
-          <div class="form-group">
-            <label for="exampleFormControlPassword12">Supplier Fax</label>
-            <input type="tel" name="supplier-fax" class="form-control rounded-pill" placeholder="Supplier's official fax">
-          </div>
-
-          <div class="form-group">
-            <label for="exampleFormControlPassword12">Payment account</label>
-            <input type="text" name="payment-method" class="form-control rounded-pill" placeholder="Supplier's payment method">
-          </div>
-
-          <div class="form-group">
-            <label for="formFile" class="form-label">Company logo</label>
-            <input class="form-control" name="company-logo" type="file" id="formFile">
+            <label for="formFile" class="form-label">Product picture</label>
+            <input class="form-control" name="product-picture" type="file" id="formFile">
           </div>
 
           <br>
           
           <div class="form-footer mt-4">
-            <button type="submit" name="submit-supplier-form" class="btn btn-primary btn-pill">Submit</button>
+            <button type="submit" name="submit-product-form" class="btn btn-primary btn-pill">Submit</button>
             <button type="reset" class="btn btn-light btn-pill">Cancel</button>
           </div>
 

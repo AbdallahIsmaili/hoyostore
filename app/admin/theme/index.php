@@ -642,11 +642,8 @@
                       </div>
                     </ul>
                   </li>
-                
-
-                
-
-                
+                                 
+                  
                   <li class="section-title">
                     Pages
                   </li>
@@ -677,7 +674,7 @@
                         
                           
                             <li >
-                              <a class="sidenav-item-link" href="user-activities.html">
+                              <a class="sidenav-item-link" href="add-product.php">
                                 <span class="nav-text">Add Products</span>
                                 
                               </a>
@@ -842,7 +839,7 @@
                         
                           
                             <li >
-                              <a class="sidenav-item-link" href="user-activities.html">
+                              <a class="sidenav-item-link" href="add-category.php">
                                 <span class="nav-text">Add Category</span>
                                 
                               </a>

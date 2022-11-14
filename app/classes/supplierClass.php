@@ -47,6 +47,8 @@ class Suppliers extends Database{
                 $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 
                 mail($to, $subject, $message, $headers);
+                
+                return $result;
                 die();
 
             }
@@ -55,7 +57,23 @@ class Suppliers extends Database{
             echo $e->getMessage();
         }
 
-        
+    }
+
+    public function getSuppliers(){
+        try{
+            
+            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $sql = "SELECT * FROM suppliers";
+
+            $statement = $this->conn->prepare($sql);
+            $statement->execute();
+            $result = $statement->fetchAll(PDO::FETCH_OBJ);
+
+            return $result;
+
+        }catch(PDOException $e){
+            echo $e->getMessage();
+        }
     }
 
 }
