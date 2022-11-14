@@ -30,7 +30,48 @@ if(isset($_POST['submit-supplier-form'])){
     $faxNumber = trim($_POST['supplier-fax']);
     $paymentMethod = trim($_POST['payment-method']);
     $discountAvailable = 0;
-    $logo = trim($_POST['company-logo']);
+
+    if(isset($_FILES['company-logo'])){
+      $img_name = $_FILES['company-logo']['name'];
+      $img_size = $_FILES['company-logo']['size'];
+      $tmp_name = $_FILES['company-logo']['tmp_name'];
+      $fileError = $_FILES['company-logo']['error'];
+
+      if($fileError === 0){
+
+          if($img_size > 5000000){
+              $error = "Sorry, your image is too large <br>";
+
+          }else{
+              // getting image extension
+              $img_ex = pathinfo($img_name, PATHINFO_EXTENSION);
+              
+              // convert image extension into lower case
+              $img_ex_lc = strtolower($img_ex);
+
+              // creating array that stores allowed to upload image extensions.
+
+              $allowed_exs = array("jpg", "jpeg", "png", "webp");
+
+              if(in_array($img_ex_lc, $allowed_exs)){
+                  // renaming the image name
+                  $logo = uniqid("IMG-", true).'.'.$img_ex_lc;
+                  //upload path
+
+                  $imgUploadPath = "./uploads/suppliers/".$logo;
+
+                  move_uploaded_file($tmp_name, $imgUploadPath);
+
+              }else{
+                $error = "Sorry, this picture format is not supported <br>";
+              }
+          }
+      }
+
+    }else{
+      $error .= "Please enter the company logo <br>";
+
+    }
 
 
     if(empty($supplierEmail) && empty($companyName) && empty($contactFName) && empty($contactLName) && empty($addressOne) && empty($addressTwo) && empty($country) && empty($city) && empty($state) && empty($codePostal) && empty($supplierEmail) && empty($contactTitle) && empty($website) && empty($date) && empty($phoneNumber) && empty($faxNumber) && empty($paymentMethod) && empty($logo)){
@@ -77,9 +118,6 @@ if(isset($_POST['submit-supplier-form'])){
 
     }else if(empty($paymentMethod) || !preg_match("/^[0-9]{16}$/", $paymentMethod)){
         $error .= "Please enter a valid payment credit card <br>";
-
-    }else if(empty($logo)){
-        $error .= "Please enter the company logo <br>";
 
     }
 
@@ -1663,7 +1701,7 @@ if(isset($_SESSION['user_url'])){
 
           <div class="row">
             <div class="col-xl-12">
-    <form action="" method="POST">
+    <form action="" method="POST" enctype="multipart/form-data">
     <!-- Add Supplyer -->
 
     <div class="card card-default">

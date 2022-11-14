@@ -20,7 +20,46 @@ if(isset($_POST['submit-category-form'])){
     $categoryDesc = trim($_POST['category-desc']);
     $createdAt = date("Y-m-d H:i:s");
     $isActive = 0;
-    $icon = trim($_POST['category-icon']);
+
+    if(isset($_FILES['category-icon'])){
+      $img_name = $_FILES['category-icon']['name'];
+      $img_size = $_FILES['category-icon']['size'];
+      $tmp_name = $_FILES['category-icon']['tmp_name'];
+      $fileError = $_FILES['category-icon']['error'];
+
+      if($fileError === 0){
+
+          if($img_size > 5000000){
+              $error = "Sorry, your image is too large <br>";
+
+          }else{
+              // getting image extension
+              $img_ex = pathinfo($img_name, PATHINFO_EXTENSION);
+              
+              // convert image extension into lower case
+              $img_ex_lc = strtolower($img_ex);
+
+              // creating array that stores allowed to upload image extensions.
+              $allowed_exs = array("jpg", "jpeg", "png", "webp");
+
+              if(in_array($img_ex_lc, $allowed_exs)){
+                  // renaming the image name
+                  $icon = uniqid("IMG-", true).'.'.$img_ex_lc;
+                  //upload path
+
+                  $imgUploadPath = "./uploads/categories/".$icon;
+
+                  move_uploaded_file($tmp_name, $imgUploadPath);
+
+              }else{
+                $error = "Sorry, this picture format is not supported <br>";
+              }
+          }
+      }
+
+    }else{
+      $error .= "Please enter the company icon <br>";
+    }
 
 
     if(empty($categoryName) && empty($categoryDesc) && empty($icon)){
@@ -31,9 +70,6 @@ if(isset($_POST['submit-category-form'])){
 
     }else if(empty($categoryDesc)){
         $error .= "Please enter category description name <br>";
-
-    }else if(empty($icon)){
-        $error .= "Please enter the company icon <br>";
 
     }else{
       $error .= "";
@@ -1620,7 +1656,7 @@ if(isset($_SESSION['user_url'])){
 
           <div class="row">
             <div class="col-xl-12">
-    <form action="add-category.php" method="POST">
+    <form action="" method="POST" enctype="multipart/form-data">
     <!-- Add Category -->
 
     <div class="card card-default">
@@ -1646,7 +1682,7 @@ if(isset($_SESSION['user_url'])){
 
             <div class="form-group">
             <label for="formFile" class="form-label">Category logo</label>
-            <input class="form-control" name="category-icon" type="file" id="formFile">
+            <input type="file" class="form-control" name="category-icon"  id="formFile">
           </div>
 
             <div class="form-footer mt-4">

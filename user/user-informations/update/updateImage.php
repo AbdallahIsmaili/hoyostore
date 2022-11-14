@@ -6,7 +6,7 @@
 
 session_start();
 $email = $_SESSION['user_email'];
-
+  
 if(isset($_FILES['newImagePicture'])){
     $img_name = $_FILES['newImagePicture']['name'];
     $img_size = $_FILES['newImagePicture']['size'];

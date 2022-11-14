@@ -182,7 +182,7 @@
                 <p id="errorMessage"></p>
 
                 <form action="./user-informations/update/updateImage.php" method="post" id='updatePictureForm' enctype="multipart/form-data">
-
+  
                     <label id="pplabel" for="newImagePicture">Choose a photo</label>
                     <input name="uploaded-image" id="newImagePicture" class="fileInput" type="file">
                     

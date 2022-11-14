@@ -31,7 +31,43 @@ if(isset($_POST['submit-product-form'])){
     $ranking = 0;
     $discount = 0;
     $discountAvailable = 0;
-    $productPicture = trim($_POST['product-picture']);
+
+    if(isset($_FILES['product-picture'])){
+      $img_name = $_FILES['product-picture']['name'];
+      $img_size = $_FILES['product-picture']['size'];
+      $tmp_name = $_FILES['product-picture']['tmp_name'];
+      $fileError = $_FILES['product-picture']['error'];
+
+      if($fileError === 0){
+
+          if($img_size > 5000000){
+              $error = "Sorry, your image is too large <br>";
+
+          }else{
+              // getting image extension
+              $img_ex = pathinfo($img_name, PATHINFO_EXTENSION);
+              
+              // convert image extension into lower case
+              $img_ex_lc = strtolower($img_ex);
+
+              // creating array that stores allowed to upload image extensions.
+              $allowed_exs = array("jpg", "jpeg", "png", "webp");
+
+              if(in_array($img_ex_lc, $allowed_exs)){
+                  // renaming the image name
+                  $productPicture = uniqid("IMG-", true).'.'.$img_ex_lc;
+                  //upload path
+
+                  $imgUploadPath = "./uploads/products/".$productPicture;
+
+                  move_uploaded_file($tmp_name, $imgUploadPath);
+
+              }else{
+                $error = "Sorry, this picture format is not supported <br>";
+              }
+          }
+      }
+    }
 
 
     if(empty($productName) && empty($productDesc) && empty($supplierId) && empty($categoryId) && empty($unitPrice) && empty($size) && empty($productColor) && empty($sizesAvailable) && empty($colorsAvailable) && empty($unitWeight) && empty($unitOnStock) && empty($unitOnOrder) && empty($productAvailable) && empty($date) && empty($ranking) && empty($discount) && empty($discountAvailable) && empty($productPicture)){
@@ -1641,7 +1677,7 @@ if(isset($_SESSION['user_url'])){
 
           <div class="row">
             <div class="col-xl-12">
-    <form action="" method="POST">
+    <form action="" method="POST" enctype="multipart/form-data">
     <!-- Add Product -->
 
     <div class="card card-default">
@@ -1784,7 +1820,7 @@ if(isset($_SESSION['user_url'])){
 
           <div class="form-group">
             <label for="formFile" class="form-label">Product picture</label>
-            <input class="form-control" name="product-picture" type="file" id="formFile">
+            <input type="file" class="form-control" id="newImagePicture" name="product-picture">
           </div>
 
           <br>
