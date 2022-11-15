@@ -1,98 +1,15 @@
-<?php 
-error_reporting(E_ALL);
-
+<?php
 include "../../classes/databaseClass.php"; 
+include "../../classes/productClass.php"; 
 include "../../classes/categoryClass.php"; 
+include "../../classes/supplierClass.php"; 
 
 session_start();
-$addCategory = new Category();
-
-$error = "";
-$validationError = "";
-$validation = "";
-$nothing = "";
-
-if (isset($_POST['submit-form']) && $_POST['submit-form'] != '' && $_POST['submit-form'] != null) {}
-
-if(isset($_POST['submit-category-form'])){
-
-    $categoryName = trim($_POST['company-name']);
-    $categoryDesc = trim($_POST['category-desc']);
-    $createdAt = date("Y-m-d H:i:s");
-    $isActive = 0;
-
-    if(isset($_FILES['category-icon'])){
-      $img_name = $_FILES['category-icon']['name'];
-      $img_size = $_FILES['category-icon']['size'];
-      $tmp_name = $_FILES['category-icon']['tmp_name'];
-      $fileError = $_FILES['category-icon']['error'];
-
-      if($fileError === 0){
-
-          if($img_size > 5000000){
-              $error = "Sorry, your image is too large <br>";
-
-          }else{
-              // getting image extension
-              $img_ex = pathinfo($img_name, PATHINFO_EXTENSION);
-              
-              // convert image extension into lower case
-              $img_ex_lc = strtolower($img_ex);
-
-              // creating array that stores allowed to upload image extensions.
-              $allowed_exs = array("jpg", "jpeg", "png", "webp");
-
-              if(in_array($img_ex_lc, $allowed_exs)){
-                  // renaming the image name
-                  $icon = uniqid("IMG-", true).'.'.$img_ex_lc;
-                  //upload path
-
-                  $imgUploadPath = "./uploads/categories/".$icon;
-
-                  move_uploaded_file($tmp_name, $imgUploadPath);
-
-              }else{
-                $error = "Sorry, this picture format is not supported <br>";
-              }
-          }
-      }
-
-    }else{
-      $error .= "Please enter the company icon <br>";
-    }
-
-
-    if(empty($categoryName) && empty($categoryDesc) && empty($icon)){
-        $error .= "Please make sure to fill in all the boxes <br>";
-
-    }else if(empty($categoryName) || !preg_match("/^[a-zA-Z_ ]*$/", $categoryName)){
-        $error .= "Please enter a valid category name <br>";
-
-    }else if(empty($categoryDesc)){
-        $error .= "Please enter category description name <br>";
-
-    }else{
-      $error .= "";
-    }
-
-    if(empty($error)){
-        $result = $addCategory->registerCategory($categoryName, $categoryDesc, $icon, $createdAt, $isActive);
-
-        if($result == 1){
-          $validationError .= "We already have this category. <br>";
-        }else{
-            $validation .= "The category $categoryName added successfully";
-        }
-        
-    }
-    
-}
 
 if(isset($_SESSION['user_url'])){
-    $user_image = $_SESSION['user_image']; 
+  $user_image = $_SESSION['user_image']; 
 
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -101,7 +18,7 @@ if(isset($_SESSION['user_url'])){
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <title>Admin - add category</title>
+  <title>Admin - Our Product list</title>
 
   <!-- GOOGLE FONTS -->
   <link href="https://fonts.googleapis.com/css?family=Karla:400,700|Roboto" rel="stylesheet">
@@ -113,6 +30,12 @@ if(isset($_SESSION['user_url'])){
   
   
   <link href="plugins/prism/prism.css" rel="stylesheet" />
+  
+  
+  
+  <link href="plugins/DataTables/DataTables-1.10.18/css/jquery.dataTables.min.css" rel="stylesheet" />
+  
+  
   
   
   <!-- MONO CSS -->
@@ -1289,7 +1212,7 @@ if(isset($_SESSION['user_url'])){
                 <span class="sr-only">Toggle navigation</span>
               </button>
 
-              <span class="page-title">Add Category</span>
+              <span class="page-title">Our Products List</span>
 
               <div class="navbar-right ">
 
@@ -1628,222 +1551,307 @@ if(isset($_SESSION['user_url'])){
 
           </header>
 
-          <?php
-            if($error != ''){
-                echo "<div class='alert alert-danger alert-icon' role='alert'>
-                <i class='mdi mdi-diameter-variant'></i> $error
-            </div><br>";
-            }
-            if($validationError != ''){
-                echo "<div class='alert alert-warning alert-icon' role='alert'>
-                <i class='mdi mdi-alert-decagram-outline'></i> $validationError
-              </div>";
-            }
-
-            if($validation != ''){
-                echo "<div class='alert alert-success' role='alert'>$validation
-              </div>";
-            }
-          ?>
-            
-
         <!-- ====================================
         ——— CONTENT WRAPPER
         ===================================== -->
         <div class="content-wrapper">
           <div class="content"><!-- For Components documentaion -->
-
-
-          <div class="row">
-            <div class="col-xl-12">
-    <form action="" method="POST" enctype="multipart/form-data">
-    <!-- Add Category -->
-
-    <div class="card card-default">
-      <div class="card-header">
-        <h2>about the category</h2>
-        <a class="btn mdi mdi-code-tags" data-toggle="collapse" href="#collapse-basic-input" role="button"
-          aria-expanded="false" aria-controls="collapse-basic-input"> </a>
-
-
-      </div>
-      <div class="card-body">
-
-          <div class="form-group">
-            <label for="exampleFormControlInput2">Category name</label>
-            <input type="text" name="company-name" class="form-control" id="exampleFormControlInput2" placeholder="Enter category name">
-            <span class="mt-2 d-block">Make sure to enter it exactly.</span>
-          </div>
-
-            <div class="form-group">
-                <label for="exampleFormControlTextarea1">Category Description</label>
-                <textarea class="form-control" id="exampleFormControlTextarea1" name="category-desc" rows="3"></textarea>
-            </div>
-
-            <div class="form-group">
-            <label for="formFile" class="form-label">Category logo</label>
-            <input type="file" class="form-control" name="category-icon"  id="formFile">
-          </div>
-
-            <div class="form-footer mt-4">
-                <button type="submit" name="submit-category-form" class="btn btn-primary btn-pill">Submit</button>
-                <button type="reset" class="btn btn-light btn-pill">Cancel</button>
-            </div>
-
-      </div>
-    </div>
-
-
-  </form>
+<div class="card card-default">
+  <div class="px-6 py-4">
+    <p>Here's where you can find everything about products we offer in our website.</p>
   </div>
 </div>
 
+<!-- Products Inventory -->
+<div class="card card-default">
+  <div class="card-header">
+    <h2>Products Inventory</h2>
+
+    <a class="btn mdi mdi-code-tags" data-toggle="collapse" href="#collapse-data-tables" role="button" aria-expanded="false"
+      aria-controls="collapse-data-tables"> </a>
+
+  </div>
+  <div class="card-body">
+    <table id="productsTable" class="table table-hover table-product" style="width:100%">
+      <thead>
+
+
+        <tr>
+          <th>Image</th>
+          <th>Product Name</th>
+          <th>SKU</th>
+          <th>Qty</th>
+          <th>Category</th>
+          <th>Supplier</th>
+          <th>Price</th>
+          <th>Color</th>
+          <th>availability</th>
+          <th>Actions</th>
+        </tr>
+
+
+      </thead>
+      <tbody>
+
+        
+        
+        <?php
+
+          $products = new Products();
+
+          $result = $products->getProducts();
+          $i = 0;
+          foreach ($result as $key) {
+
+            $picture = $result[$i]->picture;
+            $name = $result[$i]->product_name;
+            $sku = $result[$i]->SKU;
+            $qty = $result[$i]->units_in_stock;
+            $categoryID = $result[$i]->category_id;
+
+            $categoryName = new Category();
+
+            $category_name = $categoryName->getCategoryName($categoryID);
+
+            $category = $category_name[0]->category_name;
+
+            $supplierID = $result[$i]->supplier_id;
+
+            $supplierName = new Suppliers();
+
+            $supplier_name = $supplierName->getSupplierName($supplierID);
+
+            $supplier = $supplier_name[0]->company_name;
+
+            $price = $result[$i]->unit_price;
+            $color = $result[$i]->color;
+            $availability = $result[$i]->product_avilable;
+
+            echo "<tr>";
+            echo "<td class='py-0'>
+            <img src='./uploads/products/$picture' alt='Product Image'>
+          </td>";
+
+          echo "<td>$name</td>
+          <td>$sku</td>
+          <td>$qty</td>
+          <td>$category</td>
+          <td>$supplier</td>
+          <td>$price</td>
+          <td>$color</td>
+          <td>$availability</td>";
+
+          echo "<td>
+          <div class='dropdown'>
+            <a class='dropdown-toggle icon-burger-mini' href='#' role='button' id='dropdownMenuLink'
+              data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' data-display='static'>
+            </a>
+
+            <div class='dropdown-menu dropdown-menu-right' aria-labelledby='dropdownMenuLink'>
+              <a href='update-product.php' class='dropdown-item' href='#'>Update this product</a>
+              <a href='product-discount.php'  class='dropdown-item' href='#'>Discount management</a>
+              <a href='coupons.php'  class='dropdown-item' href='#'>Coupons</a>
+              <a href='our-suppliers.php'  class='dropdown-item' href='#'>Supplier</a>
+              <a href='our-categories.php'  class='dropdown-item' href='#'>Category</a>
+            </div>
+          </div>
+        </td>
+        </tr>";
+        
+        $i =$i + 1;
+          }
+
+        ?>
+
+          <!-- <td class="py-0">
+            <img src="images/products/products-xs-01.jpg" alt="Product Image">
+          </td> -->
+          <!-- <td>Coach Swagger</td>
+          <td>24541</td>
+          <td>27</td>
+          <td>1</td>
+          <td>2</td>
+          <td>
+            <div id="tbl-chart-01"></div>
+          </td>
+          <td>4</td>
+          <td>18</td> -->
+          <!-- <td>
+            <div class="dropdown">
+              <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+              </a>
+
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                <a href="update-product.php" class="dropdown-item" href="#">Update this product</a>
+                <a href="product-discount.php"  class="dropdown-item" href="#">Discount management</a>
+                <a href="coupons.php"  class="dropdown-item" href="#">Coupons</a>
+                <a href="our-suppliers.php"  class="dropdown-item" href="#">Supplier</a>
+                <a href="our-categories.php"  class="dropdown-item" href="#">Category</a>
+              </div>
+            </div>
+          </td> -->
+
+      </tbody>
+    </table>
+
+  </div>
+</div>
 </div>
           
         </div>
+        
+          <!-- Footer -->
+          <footer class="footer mt-auto">
+            <div class="copyright bg-white">
+              <p>
+                &copy; <span id="copy-year"></span> Copyright Mono Dashboard Bootstrap Template by <a class="text-primary" href="http://www.iamabdus.com/" target="_blank" >Abdus</a>.
+              </p>
+            </div>
+            <script>
+                var d = new Date();
+                var year = d.getFullYear();
+                document.getElementById("copy-year").innerHTML = year;
+            </script>
+          </footer>
 
       </div>
     </div>
     
-    <!-- Card Offcanvas -->
-    <div class="card card-offcanvas" id="contact-off" >
-        <div class="card-header">
-        <h2>Contacts</h2>
-        <a href="#" class="btn btn-primary btn-pill px-4">Add New</a>
-        </div>
-        <div class="card-body">
+                    <!-- Card Offcanvas -->
+                    <div class="card card-offcanvas" id="contact-off" >
+                      <div class="card-header">
+                        <h2>Contacts</h2>
+                        <a href="#" class="btn btn-primary btn-pill px-4">Add New</a>
+                      </div>
+                      <div class="card-body">
 
-        <div class="mb-4">
-            <input type="text" class="form-control form-control-lg form-control-secondary rounded-0" placeholder="Search contacts...">
-        </div>
+                        <div class="mb-4">
+                          <input type="text" class="form-control form-control-lg form-control-secondary rounded-0" placeholder="Search contacts...">
+                        </div>
 
-        <div class="media media-sm">
-            <div class="media-sm-wrapper">
-            <a href="user-profile.html">
-                <img src="images/user/user-sm-01.jpg" alt="User Image">
-                <span class="active bg-primary"></span>
-            </a>
-            </div>
-            <div class="media-body">
-            <a href="user-profile.html">
-                <span class="title">Selena Wagner</span>
-                <span class="discribe">Designer</span>
-            </a>
-            </div>
-        </div>
+                        <div class="media media-sm">
+                          <div class="media-sm-wrapper">
+                            <a href="user-profile.html">
+                              <img src="images/user/user-sm-01.jpg" alt="User Image">
+                              <span class="active bg-primary"></span>
+                            </a>
+                          </div>
+                          <div class="media-body">
+                            <a href="user-profile.html">
+                              <span class="title">Selena Wagner</span>
+                              <span class="discribe">Designer</span>
+                            </a>
+                          </div>
+                        </div>
 
-        <div class="media media-sm">
-            <div class="media-sm-wrapper">
-            <a href="user-profile.html">
-                <img src="images/user/user-sm-02.jpg" alt="User Image">
-                <span class="active bg-primary"></span>
-            </a>
-            </div>
-            <div class="media-body">
-            <a href="user-profile.html">
-                <span class="title">Walter Reuter</span>
-                <span>Developer</span>
-            </a>
-            </div>
-        </div>
+                        <div class="media media-sm">
+                          <div class="media-sm-wrapper">
+                            <a href="user-profile.html">
+                              <img src="images/user/user-sm-02.jpg" alt="User Image">
+                              <span class="active bg-primary"></span>
+                            </a>
+                          </div>
+                          <div class="media-body">
+                            <a href="user-profile.html">
+                              <span class="title">Walter Reuter</span>
+                              <span>Developer</span>
+                            </a>
+                          </div>
+                        </div>
 
-        <div class="media media-sm">
-            <div class="media-sm-wrapper">
-            <a href="user-profile.html">
-                <img src="images/user/user-sm-03.jpg" alt="User Image">
-            </a>
-            </div>
-            <div class="media-body">
-            <a href="user-profile.html">
-                <span class="title">Larissa Gebhardt</span>
-                <span>Cyber Punk</span>
-            </a>
-            </div>
-        </div>
+                        <div class="media media-sm">
+                          <div class="media-sm-wrapper">
+                            <a href="user-profile.html">
+                              <img src="images/user/user-sm-03.jpg" alt="User Image">
+                            </a>
+                          </div>
+                          <div class="media-body">
+                            <a href="user-profile.html">
+                              <span class="title">Larissa Gebhardt</span>
+                              <span>Cyber Punk</span>
+                            </a>
+                          </div>
+                        </div>
 
-        <div class="media media-sm">
-            <div class="media-sm-wrapper">
-            <a href="user-profile.html">
-                <img src="images/user/user-sm-04.jpg" alt="User Image">
-            </a>
+                        <div class="media media-sm">
+                          <div class="media-sm-wrapper">
+                            <a href="user-profile.html">
+                              <img src="images/user/user-sm-04.jpg" alt="User Image">
+                            </a>
 
-            </div>
-            <div class="media-body">
-            <a href="user-profile.html">
-                <span class="title">Albrecht Straub</span>
-                <span>Photographer</span>
-            </a>
-            </div>
-        </div>
+                          </div>
+                          <div class="media-body">
+                            <a href="user-profile.html">
+                              <span class="title">Albrecht Straub</span>
+                              <span>Photographer</span>
+                            </a>
+                          </div>
+                        </div>
 
-        <div class="media media-sm">
-            <div class="media-sm-wrapper">
-            <a href="user-profile.html">
-                <img src="images/user/user-sm-05.jpg" alt="User Image">
-                <span class="active bg-danger"></span>
-            </a>
-            </div>
-            <div class="media-body">
-            <a href="user-profile.html">
-                <span class="title">Leopold Ebert</span>
-                <span>Fashion Designer</span>
-            </a>
-            </div>
-        </div>
+                        <div class="media media-sm">
+                          <div class="media-sm-wrapper">
+                            <a href="user-profile.html">
+                              <img src="images/user/user-sm-05.jpg" alt="User Image">
+                              <span class="active bg-danger"></span>
+                            </a>
+                          </div>
+                          <div class="media-body">
+                            <a href="user-profile.html">
+                              <span class="title">Leopold Ebert</span>
+                              <span>Fashion Designer</span>
+                            </a>
+                          </div>
+                        </div>
 
-        <div class="media media-sm">
-            <div class="media-sm-wrapper">
-            <a href="user-profile.html">
-                <img src="images/user/user-sm-06.jpg" alt="User Image">
-                <span class="active bg-primary"></span>
-            </a>
-            </div>
-            <div class="media-body">
-            <a href="user-profile.html">
-                <span class="title">Selena Wagner</span>
-                <span>Photographer</span>
-            </a>
-            </div>
-        </div>
+                        <div class="media media-sm">
+                          <div class="media-sm-wrapper">
+                            <a href="user-profile.html">
+                              <img src="images/user/user-sm-06.jpg" alt="User Image">
+                              <span class="active bg-primary"></span>
+                            </a>
+                          </div>
+                          <div class="media-body">
+                            <a href="user-profile.html">
+                              <span class="title">Selena Wagner</span>
+                              <span>Photographer</span>
+                            </a>
+                          </div>
+                        </div>
 
-        </div>
-    </div>
+                      </div>
+                    </div>
 
 
-
-    <script type="text/javascript" src='../theme/js/jquery-3.6.1.js'></script>
-    <script src="plugins/jquery/jquery.min.js"></script>
-    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="plugins/simplebar/simplebar.min.js"></script>
-    <script src="https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>
 
     
-    
-    <script src="plugins/prism/prism.js"></script>
-    
-    
-    <script src="js/mono.js"></script>
-    <script src="js/chart.js"></script>
-    <script src="js/map.js"></script>
-    <script src="js/custom.js"></script>
+                    <script src="plugins/jquery/jquery.min.js"></script>
+                    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+                    <script src="plugins/simplebar/simplebar.min.js"></script>
+                    <script src="https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>
 
-    <!-- <script>
-      function formSubmit(){
-        $.ajax({
-          type:"POST",
-          url:'addCategory.php',
-          data: $('#formBox').serialize(),
-          success:function(response){
-            $('#success').html(response);
-          }
-        });
-        var form = document.getElementById("formBox").reset();
-        return false;
-      }
-    </script> -->
+                    
+                    
+                    <script src="plugins/prism/prism.js"></script>
+                    
+                    
+                    
+                    <script src="plugins/DataTables/DataTables-1.10.18/js/jquery.dataTables.min.js"></script>
+                    
+                    
+                    
+                    <script src="plugins/apexcharts/apexcharts.js"></script>
+                    
+                    
+                    <script src="js/mono.js"></script>
+                    <script src="js/chart.js"></script>
+                    <script src="js/map.js"></script>
+                    <script src="js/custom.js"></script>
+
+                    
 
 
-    <!--  -->
+                    <!--  -->
 
 
   </body>
@@ -1856,3 +1864,4 @@ if(isset($_SESSION['user_url'])){
       }
         
 ?>
+

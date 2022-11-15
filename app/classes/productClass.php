@@ -36,4 +36,21 @@ class Products extends Database{
 
         return $text;
     }
+
+    public function getProducts(){
+        try{
+            
+            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $sql = "SELECT * FROM products";
+
+            $statement = $this->conn->prepare($sql);
+            $statement->execute();
+            $result = $statement->fetchAll(PDO::FETCH_OBJ);
+
+            return $result;
+
+        }catch(PDOException $e){
+            echo $e->getMessage();
+        }
+    }
 }

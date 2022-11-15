@@ -55,4 +55,21 @@ class Category extends Database{
         }
     }
 
+    public function getCategoryName($categoryId){
+        try{
+            
+            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $sql = "SELECT * FROM categories WHERE category_id = '$categoryId'";
+
+            $statement = $this->conn->prepare($sql);
+            $statement->execute();
+            $result = $statement->fetchAll(PDO::FETCH_OBJ);
+
+            return $result;
+
+        }catch(PDOException $e){
+            echo $e->getMessage();
+        }
+    }
+
 }

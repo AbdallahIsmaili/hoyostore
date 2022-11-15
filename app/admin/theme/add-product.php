@@ -749,7 +749,7 @@ if(isset($_SESSION['user_url'])){
                         
                           
                             <li >
-                              <a class="sidenav-item-link" href="user-profile.html">
+                              <a class="sidenav-item-link" href="our-products.php">
                                 <span class="nav-text">Our Products</span>
                                 
                               </a>

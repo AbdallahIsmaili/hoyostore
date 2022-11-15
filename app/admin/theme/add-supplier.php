@@ -773,7 +773,7 @@ if(isset($_SESSION['user_url'])){
                         
                           
                             <li >
-                              <a class="sidenav-item-link" href="user-profile.html">
+                              <a class="sidenav-item-link" href="our-products.php">
                                 <span class="nav-text">Our Products</span>
                                 
                               </a>
@@ -1335,7 +1335,7 @@ if(isset($_SESSION['user_url'])){
                 <span class="sr-only">Toggle navigation</span>
               </button>
 
-              <span class="page-title">Add Supplier</span>
+              <span class="page-title">Add Category</span>
 
               <div class="navbar-right ">
 

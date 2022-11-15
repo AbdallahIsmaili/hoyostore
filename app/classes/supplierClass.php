@@ -76,4 +76,21 @@ class Suppliers extends Database{
         }
     }
 
+    public function getSupplierName($Id){
+        try{
+            
+            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $sql = "SELECT * FROM suppliers WHERE supplier_id = '$Id'";
+
+            $statement = $this->conn->prepare($sql);
+            $statement->execute();
+            $result = $statement->fetchAll(PDO::FETCH_OBJ);
+
+            return $result;
+
+        }catch(PDOException $e){
+            echo $e->getMessage();
+        }
+    }
+
 }
