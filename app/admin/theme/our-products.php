@@ -28,21 +28,12 @@ if(isset($_SESSION['user_url'])){
   <!-- PLUGINS CSS STYLE -->
   <link href="plugins/nprogress/nprogress.css" rel="stylesheet" />
   
-  
   <link href="plugins/prism/prism.css" rel="stylesheet" />
-  
-  
-  
+
   <link href="plugins/DataTables/DataTables-1.10.18/css/jquery.dataTables.min.css" rel="stylesheet" />
-  
-  
-  
-  
+ 
   <!-- MONO CSS -->
   <link id="main-css-href" rel="stylesheet" href="css/style.css" />
-
-  
-
 
   <!-- FAVICON -->
   <link href="images/favicon.png" rel="shortcut icon" />
