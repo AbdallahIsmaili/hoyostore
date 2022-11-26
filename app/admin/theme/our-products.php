@@ -723,7 +723,7 @@ if(isset($_SESSION['user_url'])){
                         
                           
                             <li >
-                              <a class="sidenav-item-link" href="user-profile.html">
+                              <a class="sidenav-item-link" href="our-suppliers.php">
                                 <span class="nav-text">Our Suppliers</span>
                                 
                               </a>
@@ -747,7 +747,7 @@ if(isset($_SESSION['user_url'])){
                         
                           
                             <li >
-                              <a class="sidenav-item-link" href="user-profile-settings.html">
+                              <a class="sidenav-item-link" href="update-supplier.php">
                                 <span class="nav-text">Update Supplier</span>
                                 
                               </a>
@@ -806,7 +806,7 @@ if(isset($_SESSION['user_url'])){
                         
                           
                             <li >
-                              <a class="sidenav-item-link" href="user-profile.html">
+                              <a class="sidenav-item-link" href="our-categories.php">
                                 <span class="nav-text">Our Categories</span>
                                 
                               </a>

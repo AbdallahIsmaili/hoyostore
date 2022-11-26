@@ -2,7 +2,7 @@
 
 class Suppliers extends Database{
 
-    public function registerSupplier($companyName, $contactTitle, $contactFName, $contactLName, $addressOne, $addressTwo, $country, $state, $city, $codePostal, $supplierEmail, $phoneNumber, $faxNumber, $website, $paymentMethod, $discountAvailable, $date, $logo){
+    public function registerSupplier($companyName, $contactTitle, $contactFName, $contactLName, $addressOne, $addressTwo, $country, $state, $city, $codePostal, $supplierEmail, $phoneNumber, $faxNumber, $website, $paymentMethod, $discountAvailable, $date, $logo, $status){
 
         try{
             
@@ -20,7 +20,7 @@ class Suppliers extends Database{
 
             }else {
                     
-                $sql = "INSERT INTO suppliers (company_name, join_at, contact_title, contact_first_name, contact_last_name, supplier_address_one, 	supplier_address_two, supplier_city, supplier_state, supplier_postal_code, supplier_country, supplier_phone, supplier_fax, supplier_email, supplier_website, supplier_payment_method, discount_available, 	supplier_logo) VALUES ('$companyName', '$date', '$contactTitle', '$contactFName', '$contactLName', '$addressOne','$addressTwo', '$city', '$state', '$codePostal', '$country', '$phoneNumber', '$faxNumber', '$supplierEmail', '$website', '$paymentMethod', '$discountAvailable', '$logo')";
+                $sql = "INSERT INTO suppliers (company_name, join_at, contact_title, contact_first_name, contact_last_name, supplier_address_one, 	supplier_address_two, supplier_city, supplier_state, supplier_postal_code, supplier_country, supplier_phone, supplier_fax, supplier_email, supplier_website, supplier_payment_method, discount_available, 	supplier_logo, supplier_state) VALUES ('$companyName', '$date', '$contactTitle', '$contactFName', '$contactLName', '$addressOne','$addressTwo', '$city', '$state', '$codePostal', '$country', '$phoneNumber', '$faxNumber', '$supplierEmail', '$website', '$paymentMethod', '$discountAvailable', '$logo', '$status')";
                 $statement = $this->conn->prepare($sql);
                 $statement->execute();
                 $result = $statement->fetchAll(PDO::FETCH_OBJ);

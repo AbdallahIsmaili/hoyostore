@@ -30,6 +30,7 @@ if(isset($_POST['submit-supplier-form'])){
     $faxNumber = trim($_POST['supplier-fax']);
     $paymentMethod = trim($_POST['payment-method']);
     $discountAvailable = 0;
+    $status = 1;
 
     if(isset($_FILES['company-logo'])){
       $img_name = $_FILES['company-logo']['name'];
@@ -122,7 +123,7 @@ if(isset($_POST['submit-supplier-form'])){
     }
 
     if(empty($error)){
-        $result = $addSupplier->registerSupplier($companyName, $contactTitle, $contactFName, $contactLName, $addressOne, $addressTwo, $country, $state, $city, $codePostal, $supplierEmail, $phoneNumber, $faxNumber, $website, $paymentMethod, $discountAvailable, $date, $logo);
+        $result = $addSupplier->registerSupplier($companyName, $contactTitle, $contactFName, $contactLName, $addressOne, $addressTwo, $country, $state, $city, $codePostal, $supplierEmail, $phoneNumber, $faxNumber, $website, $paymentMethod, $discountAvailable, $date, $logo, $status);
 
         if($result == 1){
           $validationError .= "We already have a companionship with that company. <br>";

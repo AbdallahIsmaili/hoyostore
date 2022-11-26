@@ -43,6 +43,9 @@ if (isset($_COOKIE['email']) and isset($_COOKIE['password']))
   $emailCookie = $_COOKIE['email'];
   $passwordCookie = $_COOKIE['password'];
 
+}else{
+  $emailCookie = "";
+  $passwordCookie = "";
 }
 
 // Log in to your account testing and validation
