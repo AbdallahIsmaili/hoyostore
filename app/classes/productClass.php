@@ -2,6 +2,7 @@
 
 class Products extends Database{
 
+    # Insert Function
     public function registerProduct($productName, $productDesc, $supplierId, $categoryId, $unitPrice, $size, $productColor, $sizesAvailable, $colorsAvailable, $unitWeight, $unitOnStock, $unitOnOrder, $productAvailable, $date, $ranking, $discount, $discountAvailable, $productPicture){
 
         try{
@@ -23,6 +24,7 @@ class Products extends Database{
         
     }
 
+    # generate SKU code function
     public function get_sku($length){
         $array = array(0,1,2,3,4,5,6,7,8,9,'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
         $text = "";
@@ -36,6 +38,7 @@ class Products extends Database{
         return $text;
     }
 
+    # Get All Products Function
     public function getProducts(){
         try{
             
@@ -53,6 +56,7 @@ class Products extends Database{
         }
     }
 
+    # Search On Product
     public function searchOnProduct($searchedProductName, $productMaxPrice, $productMinPrice, $category, $supplier){
         try{
             
@@ -97,6 +101,59 @@ class Products extends Database{
         }catch(PDOException $e){
             echo $e->getMessage();
         }
+    }
+
+    # Get Product Information By Id
+    public function getProductByID($id){
+        try{
+            
+            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $sql = "SELECT * FROM products WHERE product_id = '$id'";
+
+            $statement = $this->conn->prepare($sql);
+            $statement->execute();
+            $result = $statement->fetchAll(PDO::FETCH_OBJ);
+
+            return $result;
+
+        }catch(PDOException $e){
+            echo $e->getMessage();
+        }
+    }
+
+    # Update Function
+    public function updateProduct($productID, $productName, $productDesc, $supplierId, $categoryId, $unitPrice, $size, $productColor, $sizesAvailable, $colorsAvailable, $unitWeight, $unitOnStock, $productPicture){
+
+        try{
+
+            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $sql = "SELECT * FROM products WHERE product_id = '$productID'";
+
+            $statement = $this->conn->prepare($sql);
+            $statement->execute();
+            $result = $statement->fetchAll(PDO::FETCH_OBJ);
+
+            if(count($result) > 0){
+                
+                $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $sql = "UPDATE products SET product_name = '$productName', product_description = '$productDesc', supplier_id = '$supplierId', category_id = '$categoryId', unit_price = '$unitPrice', size = '$size', color = '$productColor', avialable_size = '$sizesAvailable', avialable_colors = '$colorsAvailable', unit_weight = '$unitWeight', units_in_stock = '$unitOnStock', picture = '$productPicture' WHERE product_id = '$productID'";
+
+                $statement = $this->conn->prepare($sql);
+                $statement->execute();
+                $result = $statement->fetchAll(PDO::FETCH_OBJ);
+                
+                return 1;
+                die();
+
+            }else{
+                return 2;
+                die();
+            }
+
+        }catch(PDOException $e){
+            echo $e->getMessage();
+        }
+        
     }
 
 }

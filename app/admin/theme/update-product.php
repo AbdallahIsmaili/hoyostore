@@ -7,6 +7,10 @@ include "../../classes/supplierClass.php";
 
 session_start();
 
+################### 
+# Search on product submit form 
+####################
+
 $searchProduct = new Products();
 $searchResult = [];
 
@@ -32,13 +36,52 @@ if(isset($_POST['submit-product-search-form'])){
     $searchResult = $searchProduct->searchOnProduct($searchedProductName, $productMaxPrice, $productMinPrice, $category, $supplier);
 }
 
-$addProduct = new Products();
+################### 
+# Getting product info from url 
+####################
+
+$getProduct = new Products();
+
+if(isset($_GET['product'])){
+
+    $productID = $_GET['product'];
+    $getResult = $getProduct->getProductByID($productID);
+
+    foreach ($getResult as $key) {
+
+        $id = $getResult[0]->product_id;
+
+        // $picture = $getResult[0]->picture;
+        $gottenName = $getResult[0]->product_name;
+        $gottenDesc = $getResult[0]->product_description;
+        $gottenPrice = $getResult[0]->unit_price;
+
+        $gottenSize = $getResult[0]->size;
+        $gottenColor = $getResult[0]->color;
+        $gottenColorsAvailable = $getResult[0]->avialable_colors;
+        $gottenSizesAvailable = $getResult[0]->avialable_size;
+
+        $gottenWeight = $getResult[0]->unit_weight;
+        $gottenQty = $getResult[0]->units_in_stock;
+
+    }
+
+}else{
+
+    $productID = "";
+}
+
+################### 
+# Update product submit form 
+####################
+
+$updateProduct = new Products();
 
 $error = "";
 $validationError = "";
 $validation = "";
 
-if(isset($_POST['submit-product-form'])){
+if(isset($_POST['submit-update-product-form'])){
 
     $productName = trim($_POST['product-name']);
     $productDesc = trim($_POST['product-desc']);
@@ -51,12 +94,6 @@ if(isset($_POST['submit-product-form'])){
     $colorsAvailable = trim($_POST['colors-available']);
     $unitWeight = trim($_POST['unit-weight']);
     $unitOnStock = trim($_POST['unit-on-stock']);
-    $unitOnOrder = 0;
-    $productAvailable = 1;
-    $date = date("Y-m-d H:i:s");
-    $ranking = 0;
-    $discount = 0;
-    $discountAvailable = 0;
 
     if(isset($_FILES['product-picture'])){
       $img_name = $_FILES['product-picture']['name'];
@@ -96,7 +133,7 @@ if(isset($_POST['submit-product-form'])){
     }
 
 
-    if(empty($productName) && empty($productDesc) && empty($supplierId) && empty($categoryId) && empty($unitPrice) && empty($size) && empty($productColor) && empty($sizesAvailable) && empty($colorsAvailable) && empty($unitWeight) && empty($unitOnStock) && empty($unitOnOrder) && empty($productAvailable) && empty($date) && empty($ranking) && empty($discount) && empty($discountAvailable) && empty($productPicture)){
+    if(empty($productName) && empty($productDesc) && empty($supplierId) && empty($categoryId) && empty($unitPrice) && empty($size) && empty($productColor) && empty($sizesAvailable) && empty($colorsAvailable) && empty($unitWeight) && empty($unitOnStock) && empty($productPicture)){
         $error .= "Please make sure to fill in all the boxes <br>";
 
     }else if(empty($productName)){
@@ -126,11 +163,24 @@ if(isset($_POST['submit-product-form'])){
     }
 
     if(empty($error)){
-        $result = $addProduct->registerProduct($productName, $productDesc, $supplierId, $categoryId, $unitPrice, $size, $productColor, $sizesAvailable, $colorsAvailable, $unitWeight, $unitOnStock, $unitOnOrder, $productAvailable, $date, $ranking, $discount, $discountAvailable, $productPicture);
+        $result = $updateProduct->updateProduct($productID, $productName, $productDesc, $supplierId, $categoryId, $unitPrice, $size, $productColor, $sizesAvailable, $colorsAvailable, $unitWeight, $unitOnStock, $productPicture);
 
         if($result == 1){
-          $validation .= "The product <b>$productName</b> added successfully";
+          $validation .= "The product <b>$productName</b> updated successfully";
+
+          echo "<script>
+          
+            setTimeout(function(){
+                window.location.href = './our-products.php';
+                }, 3000);
+            
+            </script>";
+
         }
+
+        if($result == 2){
+            $error .= "The product <b>$productName</b> isn't found or may be we run into a problem.";
+          }
         
     }
 
@@ -1797,62 +1847,50 @@ if(isset($_SESSION['user_url'])){
             $i = 0;
             foreach ($searchResult as $key) {
 
-            $picture = $searchResult[$i]->picture;
-            $name = $searchResult[$i]->product_name;
-            $sku = $searchResult[$i]->SKU;
-            $qty = $searchResult[$i]->units_in_stock;
-            $categoryID = $searchResult[$i]->category_id;
+                $id = $searchResult[$i]->product_id;
+                $picture = $searchResult[$i]->picture;
+                $name = $searchResult[$i]->product_name;
+                $sku = $searchResult[$i]->SKU;
+                $qty = $searchResult[$i]->units_in_stock;
+                $categoryID = $searchResult[$i]->category_id;
 
-            $categoryName = new Category();
+                $categoryName = new Category();
 
-            $category_name = $categoryName->getCategoryName($categoryID);
+                $category_name = $categoryName->getCategoryName($categoryID);
 
-            $category = $category_name[0]->category_name;
+                $category = $category_name[0]->category_name;
 
-            $supplierID = $searchResult[$i]->supplier_id;
+                $supplierID = $searchResult[$i]->supplier_id;
 
-            $supplierName = new Suppliers();
+                $supplierName = new Suppliers();
 
-            $supplier_name = $supplierName->getSupplierName($supplierID);
+                $supplier_name = $supplierName->getSupplierName($supplierID);
 
-            $supplier = $supplier_name[0]->company_name;
+                $supplier = $supplier_name[0]->company_name;
 
-            $price = $searchResult[$i]->unit_price;
-            $color = $searchResult[$i]->color;
-            $availability = $searchResult[$i]->product_avilable;
+                $price = $searchResult[$i]->unit_price;
+                $color = $searchResult[$i]->color;
+                $availability = $searchResult[$i]->product_avilable;
 
-            echo "<tr>";
-            echo "<td class='py-0'>
-            <img src='./uploads/products/$picture' alt='Product Image'>
-          </td>";
+                echo "<tr>";
+                echo "<td class='py-0'>
+                <img src='./uploads/products/$picture' alt='Product Image'>
+            </td>";
 
-          echo "<td>$name</td>
-          <td>$sku</td>
-          <td>$qty</td>
-          <td>$category</td>
-          <td>$supplier</td>
-          <td>$price</td>
-          <td>$color</td>
-          <td>$availability</td>";
+            echo "<td>$name</td>
+            <td>$sku</td>
+            <td>$qty</td>
+            <td>$category</td>
+            <td>$supplier</td>
+            <td>$price</td>
+            <td>$color</td>
+            <td>$availability</td>";
 
-          echo "<td>
-          <div class='dropdown'>
-            <a class='dropdown-toggle icon-burger-mini' href='#' role='button' id='dropdownMenuLink'
-              data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' data-display='static'>
-            </a>
-
-            <div class='dropdown-menu dropdown-menu-right' aria-labelledby='dropdownMenuLink'>
-              <a href='update-product.php' class='dropdown-item' href='#'>Update this product</a>
-              <a href='product-discount.php'  class='dropdown-item' href='#'>Discount management</a>
-              <a href='coupons.php'  class='dropdown-item' href='#'>Coupons</a>
-              <a href='our-suppliers.php'  class='dropdown-item' href='#'>Supplier</a>
-              <a href='our-categories.php'  class='dropdown-item' href='#'>Category</a>
-            </div>
-          </div>
-        </td>
-        </tr>";
-        
-        $i =$i + 1;
+            echo "<td> <a href='update-product.php?product=$id'><span class='badge badge-square badge-info'>Update</span></a> 
+            </td>
+            </tr>";
+            
+            $i =$i + 1;
         
         }
 
@@ -1889,14 +1927,23 @@ if(isset($_SESSION['user_url'])){
 
           <div class="form-group">
             <label for="exampleFormControlInput2">Product name</label>
-            <input type="text" name="product-name" class="form-control" id="exampleFormControlInput2" placeholder="Enter product name">
+            <input type="text" name="product-name" class="form-control" value="<?=$gottenName?>"  id="exampleFormControlInput2" placeholder="Enter product name">
             <span class="mt-2 d-block">Make sure to enter it exactly.</span>
           </div>
 
           <div class="form-group">
             <label for="exampleFormControlTextarea1">Product Description</label>
-            <textarea class="form-control" id="exampleFormControlTextarea1" name="product-desc" rows="3"></textarea>
+            <textarea class="form-control" id="exampleFormControlTextarea1" name="product-desc" rows="3"><?=$gottenDesc?></textarea>
           </div>
+
+        <div class="">
+            <div class="card text-white bg-warning m-5">
+                <div class="card-body">
+                    <p class="card-text"> Note: you need to choose <u> <strong>the supplier</strong> </u> and <u> <strong>the category</strong> </u> correctly here.
+                    </p>
+                </div>
+            </div>
+        </div>
 
           <div class="form-group">
             <label for="exampleFormControlSelect14">The Supplier</label>
@@ -1917,7 +1964,7 @@ if(isset($_SESSION['user_url'])){
           </div>
 
           <div class="form-group">
-            <label for="exampleFormControlSelect14">The Supplier</label>
+            <label for="exampleFormControlSelect14">The Category</label>
             <select name="category-id" class="form-control rounded-0" id="exampleFormControlSelect14">
 
             <?php
@@ -1936,7 +1983,7 @@ if(isset($_SESSION['user_url'])){
 
           <div class="form-group">
             <label for="exampleFormControlPassword">Unit Price</label>
-            <input type="number" name="unit-price" class="form-control" id="exampleFormControlPassword" placeholder="The price for one unit">
+            <input type="number" value="<?=$gottenPrice?>" name="unit-price" class="form-control" id="exampleFormControlPassword" placeholder="The price for one unit">
           </div>
 
       </div>
@@ -1957,14 +2004,14 @@ if(isset($_SESSION['user_url'])){
             <div class="col-sm-6">
               <div class="form-group">
                 <label for="fcountry">Size</label>
-                <input type="text" name="size" class="form-control" placeholder="Size">
+                <input type="text" value="<?=$gottenSize?>" name="size" class="form-control" placeholder="Size">
               </div>
             </div>
 
             <div class="col-sm-6">
               <div class="form-group">
                 <label for="city">Color</label>
-                <input type="color" name="product-color" class="form-control" placeholder="Color">
+                <input type="color" value="<?=$gottenColor?>" name="product-color" class="form-control" placeholder="Color">
               </div>
             </div>
 
@@ -1973,7 +2020,7 @@ if(isset($_SESSION['user_url'])){
                 <div class="col-6">
                   <div class="form-group">
                     <label for="State">Sizes available</label>
-                    <input type="text" name="sizes-available" class="form-control" placeholder="Sizes">
+                    <input type="text" value="<?=$gottenSizesAvailable?>" name="sizes-available" class="form-control" placeholder="Sizes">
                     <span class="mt-2 d-block">For clothes only (XXL, XL, L, M, S, XS).</span>
 
                   </div>
@@ -1982,7 +2029,7 @@ if(isset($_SESSION['user_url'])){
                 <div class="col-6">
                   <div class="form-group">
                     <label for="Zip">Colors available</label>
-                    <input type="text" name="colors-available"  class="form-control" placeholder="Colors">
+                    <input type="text" value="<?=$gottenColorsAvailable?>" name="colors-available"  class="form-control" placeholder="Colors">
                     <span class="mt-2 d-block">Available clothes (no more than ten colors).</span>
                   </div>
                 </div>
@@ -2006,13 +2053,13 @@ if(isset($_SESSION['user_url'])){
         
       <div class="form-group">
             <label for="exampleFormControlInput3">Unit weight</label>
-            <input type="number" class="form-control rounded-pill" name="unit-weight" id="exampleFormControlInput3" placeholder="Enter the weight">
+            <input type="number" value="<?=$gottenWeight?>" class="form-control rounded-pill" name="unit-weight" id="exampleFormControlInput3" placeholder="Enter the weight">
             <span class="mt-2 d-block">By Kg only.</span>
           </div>
 
         <div class="form-group">
             <label for="exampleFormControlInput3">Unit on stock</label>
-            <input type="number" class="form-control rounded-pill" name="unit-on-stock" id="exampleFormControlInput3" placeholder="Enter it exactly">
+            <input type="number" value="<?=$gottenQty?>" class="form-control rounded-pill" name="unit-on-stock" id="exampleFormControlInput3" placeholder="Enter it exactly">
           </div>
 
           <div class="form-group">
@@ -2023,7 +2070,7 @@ if(isset($_SESSION['user_url'])){
           <br>
           
           <div class="form-footer mt-4">
-            <button type="submit" name="submit-product-form" class="btn btn-primary btn-pill">Submit</button>
+            <button type="submit" name="submit-update-product-form" class="btn btn-primary btn-pill">Submit</button>
             <button type="reset" class="btn btn-light btn-pill">Cancel</button>
           </div>
 
