@@ -1594,6 +1594,7 @@ if(isset($_SESSION['user_url'])){
           $i = 0;
           foreach ($result as $key) {
 
+            $id = $result[$i]->product_id;
             $picture = $result[$i]->picture;
             $name = $result[$i]->product_name;
             $sku = $result[$i]->SKU;
@@ -1639,7 +1640,7 @@ if(isset($_SESSION['user_url'])){
             </a>
 
             <div class='dropdown-menu dropdown-menu-right' aria-labelledby='dropdownMenuLink'>
-              <a href='update-product.php' class='dropdown-item' href='#'>Update this product</a>
+              <a href='update-product.php?product=$id' class='dropdown-item' href='#'>Update this product</a>
               <a href='product-discount.php'  class='dropdown-item' href='#'>Discount management</a>
               <a href='coupons.php'  class='dropdown-item' href='#'>Coupons</a>
               <a href='our-suppliers.php'  class='dropdown-item' href='#'>Supplier</a>
