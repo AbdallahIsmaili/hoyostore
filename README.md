@@ -1,2 +1,2 @@
 # hoyostore
- Online store for Genshin Impact game
+ Online web store application.
