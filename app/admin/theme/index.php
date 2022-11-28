@@ -662,7 +662,7 @@
                         
                           
                             <li >
-                              <a class="sidenav-item-link" href="user-profile.html">
+                              <a class="sidenav-item-link" href="our-products.php">
                                 <span class="nav-text">Our Products</span>
                                 
                               </a>
@@ -686,7 +686,7 @@
                         
                           
                             <li >
-                              <a class="sidenav-item-link" href="user-profile-settings.html">
+                              <a class="sidenav-item-link" href="update-product.php">
                                 <span class="nav-text">Update Product</span>
                                 
                               </a>
@@ -744,7 +744,7 @@
                         
                           
                             <li >
-                              <a class="sidenav-item-link" href="user-profile.html">
+                              <a class="sidenav-item-link" href="our-suppliers.php">
                                 <span class="nav-text">Our Suppliers</span>
                                 
                               </a>
@@ -827,7 +827,7 @@
                         
                           
                             <li >
-                              <a class="sidenav-item-link" href="user-profile.html">
+                              <a class="sidenav-item-link" href="our-categories.php">
                                 <span class="nav-text">Our Categories</span>
                                 
                               </a>

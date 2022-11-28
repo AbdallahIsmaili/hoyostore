@@ -1654,35 +1654,6 @@ if(isset($_SESSION['user_url'])){
 
         ?>
 
-          <!-- <td class="py-0">
-            <img src="images/products/products-xs-01.jpg" alt="Product Image">
-          </td> -->
-          <!-- <td>Coach Swagger</td>
-          <td>24541</td>
-          <td>27</td>
-          <td>1</td>
-          <td>2</td>
-          <td>
-            <div id="tbl-chart-01"></div>
-          </td>
-          <td>4</td>
-          <td>18</td> -->
-          <!-- <td>
-            <div class="dropdown">
-              <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdownMenuLink"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
-              </a>
-
-              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                <a href="update-product.php" class="dropdown-item" href="#">Update this product</a>
-                <a href="product-discount.php"  class="dropdown-item" href="#">Discount management</a>
-                <a href="coupons.php"  class="dropdown-item" href="#">Coupons</a>
-                <a href="our-suppliers.php"  class="dropdown-item" href="#">Supplier</a>
-                <a href="our-categories.php"  class="dropdown-item" href="#">Category</a>
-              </div>
-            </div>
-          </td> -->
-
       </tbody>
     </table>
 

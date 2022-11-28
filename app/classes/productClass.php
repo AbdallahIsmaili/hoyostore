@@ -20,7 +20,6 @@ class Products extends Database{
         }catch(PDOException $e){
             echo $e->getMessage();
         }
-
         
     }
 
@@ -53,4 +52,51 @@ class Products extends Database{
             echo $e->getMessage();
         }
     }
+
+    public function searchOnProduct($searchedProductName, $productMaxPrice, $productMinPrice, $category, $supplier){
+        try{
+            
+            # name found but prices not found
+            if($productMinPrice == 0 and $productMaxPrice == 0 and $searchedProductName != ''){
+
+                $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $sql = "SELECT * FROM products where category_id = '$category' and supplier_id = '$supplier' and product_name LIKE '%$searchedProductName%'";
+
+            }
+            
+            # all 3 found
+            if($productMinPrice != 0 and $productMaxPrice != 0 and $searchedProductName != ''){
+
+                $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $sql = "SELECT * FROM products where category_id = '$category' and supplier_id = '$supplier' and unit_price <= '$productMaxPrice' and unit_price >= '$productMinPrice' and product_name LIKE '%$searchedProductName%'";
+
+            }
+
+            # all 3 not found
+            if($productMinPrice == 0 and $productMaxPrice == 0 and $searchedProductName == ''){
+
+                $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $sql = "SELECT * FROM products where category_id = '$category' and supplier_id = '$supplier'";
+
+            }
+
+            # all prices found but name not found
+            if($productMinPrice != 0 and $productMaxPrice != 0 and $searchedProductName == ''){
+
+                $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $sql = "SELECT * FROM products where category_id = '$category' and supplier_id = '$supplier' and unit_price <= '$productMaxPrice' and unit_price >= '$productMinPrice'";
+
+            }
+
+            $statement = $this->conn->prepare($sql);
+            $statement->execute();
+            $result = $statement->fetchAll(PDO::FETCH_OBJ);
+
+            return $result;
+
+        }catch(PDOException $e){
+            echo $e->getMessage();
+        }
+    }
+
 }
