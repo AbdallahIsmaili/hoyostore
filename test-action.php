@@ -1,7 +1,7 @@
 <?php
 
 $a = 14;
-$b = 'Hello there';
+$b = 1;
 
 $c = $a + $b;
 
